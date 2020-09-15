@@ -84,10 +84,7 @@ public class signUp extends AppCompatActivity {
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which)
-                            {
-
+                            public void onClick(DialogInterface dialog, int which) {
                                 // When the user click yes button
                                 // then app will close
                                 finish();
@@ -97,17 +94,10 @@ public class signUp extends AppCompatActivity {
         // Set the Negative button with No name
         // OnClickListener method is use
         // of DialogInterface interface.
-        builder
-                .setNegativeButton(
-                        "No",
-                        new DialogInterface
-                                .OnClickListener() {
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
 
                             @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which)
-                            {
-
+                            public void onClick(DialogInterface dialog, int which) {
                                 // If user click no
                                 // then dialog box is canceled.
                                 dialog.cancel();
