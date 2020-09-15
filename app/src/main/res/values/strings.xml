@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Library</string>
+    <string name="userMail">yourname@example.com</string>
+    <string name="userPassword">password</string>
+    <string name="log_in">log in</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="searchHint">Search titles, author or reading lists</string>
+    <string name="create_password">create password</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="full_name">Full Name</string>
+    <string name="registration_number">registration number</string>
+    <string name="welcomePhrase">Find, Borrow, Return</string>
+    <string name="welcome">WELCOME</string>
+    <string name="title_activity_app_home">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+</resources>

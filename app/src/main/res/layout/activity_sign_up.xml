@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".signUp">
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <EditText
+            android:id="@+id/userName"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:autofillHints="@string/full_name"
+            android:hint="@string/full_name"
+            android:inputType="text"
+            android:gravity="center_horizontal" />
+
+        <EditText
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/userMail"
+            android:autofillHints="@string/userMail"
+            android:id="@+id/userMail"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:inputType="textEmailAddress"
+            android:gravity="center_horizontal" />
+
+        <EditText
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/registration_number"
+            android:autofillHints="@string/registration_number"
+            android:id="@+id/regNo"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:gravity="center_horizontal" />
+
+        <EditText
+            android:layout_width="280dp"
+            android:textAlignment="center"
+            android:inputType="textPassword"
+            android:id="@+id/createdPassword"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/create_password"
+            android:autofillHints="@string/create_password"
+            android:gravity="center_horizontal" />
+
+        <EditText
+            android:layout_width="280dp"
+            android:textAlignment="center"
+            android:inputType="textPassword"
+            android:id="@+id/confirmedPassword"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/confirm_password"
+            android:autofillHints="@string/confirm_password"
+            android:gravity="center_horizontal" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_marginTop="50dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+
+        <Button
+            android:layout_width="280dp"
+            android:id="@+id/signUpBtn"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up"
+            android:layout_marginTop="50dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+
+        <Button
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/log_in"
+            android:id="@+id/logInBtn"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
