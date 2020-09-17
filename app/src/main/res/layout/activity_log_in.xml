@@ -9,9 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-
-        android:layout_centerInParent="true"
-        >
+        android:layout_centerInParent="true">
 
 
         <EditText
@@ -53,6 +51,8 @@
             android:layout_marginLeft="12dp"
             android:layout_marginTop="10dp"
             />
+
+
         <Button
             android:layout_width="280dp"
             android:id="@+id/mainlogInBtn"

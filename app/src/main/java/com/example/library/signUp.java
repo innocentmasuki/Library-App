@@ -13,14 +13,43 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class signUp extends AppCompatActivity {
  Button logInbtn , signUpBtn;
- ProgressBar progressbar;
- EditText fullName, userMail,regNumber,newPassword,confirmedPwd;
+ EditText fullName;
+    EditText userMail;
+    RadioGroup category;
+    EditText newPassword;
+    EditText confirmedPwd;
+    RadioButton selectedCat;
+    String password;
+//    ArrayList<UserProfile> arrayList= new ArrayList<>();
+    RequestQueue requestQueue;
+
+
+
+    String url = "http://192.168.137.1/library/register.php";
+ String search_url = "http://192.168.137.1/library/retrieve.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +60,9 @@ public class signUp extends AppCompatActivity {
         confirmedPwd = (EditText) findViewById(R.id.confirmedPassword);
         fullName = (EditText) findViewById(R.id.userName);
         userMail = (EditText) findViewById(R.id.userMail);
-        regNumber = (EditText) findViewById(R.id.regNo);
+        category = (RadioGroup) findViewById(R.id.category);
         logInbtn  =  (Button) findViewById(R.id.logInBtn);
         signUpBtn = (Button) findViewById(R.id.signUpBtn);
-
-        progressbar = (ProgressBar) findViewById(R.id.progressBar);
-
-
-
-        openLogin();
-    }
-
-
-    public void openLogin() {
 
         logInbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +72,115 @@ public class signUp extends AppCompatActivity {
             }
         });
 
+
         signUpBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(signUp.this, AppHome.class));
-                finish();
+                getData();
             }
+
         });
     }
+
+    private void getData() {
+        final String userEmail = userMail.getText().toString();
+
+        StringRequest request=new StringRequest(Request.Method.GET, search_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+//                arrayList.clear();
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for(int i=0; i<jsonArray.length();i++){
+                        JSONObject profile=jsonArray.getJSONObject(i);
+
+                        if(!userEmail.equals(profile.getString("email"))){
+                            sendData();
+                        }
+                        else {
+                            Toast.makeText(signUp.this, "User is already Present", Toast.LENGTH_SHORT).show();
+                        }
+//                        userProfile.setFullname(profile.getString("fullname"));
+//                        userProfile.setEmail(profile.getString("email"));
+//                        userProfile.setPassword(profile.getString("password"));
+//                        userProfile.setCategory(profile.getString("category"));
+//                        arrayList.add(userProfile);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params=new HashMap<>();
+                return params;
+            }
+        };
+       requestQueue.add(request);
+    }
+
+
+    public void sendData(){
+        int selectedId = category.getCheckedRadioButtonId();
+        selectedCat = (RadioButton) findViewById(selectedId);
+
+         final String name, email, category;
+        if(newPassword.getText().toString().equals(confirmedPwd.getText().toString())){
+            password = confirmedPwd.getText().toString();
+        }else{
+            password = "wrong";
+        }
+        name = fullName.getText().toString();
+        email = userMail.getText().toString();
+        category = selectedCat.getText().toString();
+
+        if(!name.equals("") && !email.equals("") && !category.equals("") && !(password.equals("") || password.equals("wrong"))){
+            StringRequest request = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(signUp.this, AppHome.class));
+                            finish();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    error.printStackTrace();
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("fullname",name);
+                    params.put("email",email);
+                    params.put("category",category);
+                    params.put("password",password);
+                    return params;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
+            requestQueue.add(request);
+
+
+
+        }else {
+            Toast.makeText(signUp.this, "All Blanks must be filled", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
 
     public void onBackPressed() {
         // Create the object of

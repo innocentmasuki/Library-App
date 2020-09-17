@@ -34,16 +34,7 @@
             android:inputType="textEmailAddress"
             android:gravity="center_horizontal" />
 
-        <EditText
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/registration_number"
-            android:autofillHints="@string/registration_number"
-            android:id="@+id/regNo"
-            android:layout_marginTop="10dp"
-            android:inputType="text"
-            android:textAlignment="center"
-            android:gravity="center_horizontal" />
+
 
         <EditText
             android:layout_width="280dp"
@@ -66,13 +57,38 @@
             android:hint="@string/confirm_password"
             android:autofillHints="@string/confirm_password"
             android:gravity="center_horizontal" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="50dp"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_height="match_parent">
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:id="@+id/category"
+            android:layout_height="wrap_content">
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:id="@+id/teacherOpt"
+        android:layout_height="wrap_content"
+        android:text="Teacher"/>
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="-32dp"
+
+        android:layout_height="wrap_content"
+        android:text="Student"
+        android:layout_marginStart="140dp"
+        />
+        </RadioGroup>
+</RelativeLayout>
+
+
+
+
+
 
 
         <Button

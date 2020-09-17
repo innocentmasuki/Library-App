@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 public class LogIn extends AppCompatActivity {
     Button logInBtn;
@@ -23,6 +24,11 @@ public class LogIn extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public void onBackPressed(){
+        startActivity(new Intent(LogIn.this, signUp.class));
+        finish();
     }
 
 
