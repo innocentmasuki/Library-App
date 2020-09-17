@@ -1,40 +1,29 @@
 package com.example.library;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 public class LogIn extends AppCompatActivity {
-    @RequiresApi(api = Build.VERSION_CODES.O)
-
+    Button logInBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_log_in);
 
-        Button logInBtn = (Button) findViewById(R.id.logInBtn);
+        logInBtn = findViewById(R.id.mainlogInBtn);
+
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAppHome();
+                startActivity(new Intent(LogIn.this, AppHome.class));
+                finish();
             }
         });
     }
 
-    public void openAppHome() {
-        startActivity(new Intent(LogIn.this, AppHome.class));
-        finish();
-    }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(LogIn.this, signUp.class));
-        finish();
-    }
 }
