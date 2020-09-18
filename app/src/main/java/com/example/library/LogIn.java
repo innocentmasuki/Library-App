@@ -24,7 +24,7 @@ import java.util.Map;
 public class LogIn extends AppCompatActivity {
     Button logInBtn;
     TextView lemail, lpass;
-    String logIn_url = "http://192.168.137.1/library/login.php";
+    String logIn_url = "http://192.168.43.225/library/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -44,13 +44,10 @@ public class signUp extends AppCompatActivity {
     RadioButton selectedCat;
 
 
-//    ArrayList<UserProfile> arrayList= new ArrayList<>();
-    RequestQueue requestQueue;
 
 
-    String validate_url = "http://192.168.137.1/library/validate.php";
-    String url = "http://192.168.137.1/library/register.php";
-    String userCat;
+    String validate_url = "http://192.168.43.225/library/validate.php";
+    String url = "http://192.168.43.225/library/register.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +58,11 @@ public class signUp extends AppCompatActivity {
         confirmedPwd = (EditText) findViewById(R.id.confirmedPassword);
         fullName = (EditText) findViewById(R.id.userName);
         userMail = (EditText) findViewById(R.id.userMail);
-        category = (RadioGroup) findViewById(R.id.category);
+//        category = (RadioGroup) findViewById(R.id.category);
         logInbtn  =  (Button) findViewById(R.id.logInBtn);
         signUpBtn = (Button) findViewById(R.id.signUpBtn);
-        int selectedId = category.getCheckedRadioButtonId();
-        selectedCat = (RadioButton) findViewById(selectedId);
+//        int selectedId = category.getCheckedRadioButtonId();
+//        selectedCat = (RadioButton) findViewById(selectedId);
 
 
         logInbtn.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +98,7 @@ public class signUp extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             if(response.equals("Can't create account! exixting user")){
-                                Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
+                                Toast.makeText(signUp.this, response, Toast.LENGTH_SHORT).show();
                             }else if(response.equals("dont Exist")){
                                 sendData();
                             }
@@ -130,25 +127,27 @@ public class signUp extends AppCompatActivity {
     public void sendData(){
 
          final String name, email, category, password;
+
         if(newPassword.getText().toString().equals(confirmedPwd.getText().toString())){
             password = confirmedPwd.getText().toString();
         }else{
             password = "wrong";
         }
+
         name = fullName.getText().toString();
         email = userMail.getText().toString();
-        category = selectedCat.getText().toString();
+//        category = selectedCat.getText().toString();
 
             if (!password.equals("wrong")){
     StringRequest signUprequest = new StringRequest(Request.Method.POST, url,
             new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    fullName.setText("");
-                    userMail.setText("");
-                    newPassword.setText("");
-                    confirmedPwd.setText("");
                     if(response.equals("Welcome \uD83E\uDD17")){
+                        fullName.setText("");
+                        userMail.setText("");
+                        newPassword.setText("");
+                        confirmedPwd.setText("");
                         Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(signUp.this, LogIn.class));
                         finish();
@@ -159,7 +158,7 @@ public class signUp extends AppCompatActivity {
             }, new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            Toast.makeText(signUp.this, "Can' create account try again later", Toast.LENGTH_LONG).show();
+            Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_LONG).show();
             error.printStackTrace();
         }
     }){
@@ -168,18 +167,18 @@ public class signUp extends AppCompatActivity {
             Map<String, String> params = new HashMap<String, String>();
             params.put("fullname",name);
             params.put("email",email);
-            params.put("category",category);
+//            params.put("category",category);
             params.put("password",password);
             return params;
         }
     };
     RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
     requestQueue.add(signUprequest);
-}else{
-    newPassword.setText("");
-    newPassword.setText("");
-    Toast.makeText(this, "Password Mismatch", Toast.LENGTH_SHORT).show();
-}
+}else {
+                newPassword.setText("");
+                confirmedPwd.setText("");
+                Toast.makeText(this, "Password Mismatch", Toast.LENGTH_SHORT).show();
+            }
 
 
 
