@@ -47,9 +47,8 @@ public class signUp extends AppCompatActivity {
     RequestQueue requestQueue;
 
 
-
+    String validate_url = "http://192.168.137.1/library/validate.php";
     String url = "http://192.168.137.1/library/register.php";
- String search_url = "http://192.168.137.1/library/retrieve.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,54 +76,53 @@ public class signUp extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                getData();
+                validate();
             }
 
         });
     }
 
-    private void getData() {
-        final String userEmail = userMail.getText().toString();
+    private void validate() {
 
-        StringRequest request=new StringRequest(Request.Method.GET, search_url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-//                arrayList.clear();
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for(int i=0; i<jsonArray.length();i++){
-                        JSONObject profile=jsonArray.getJSONObject(i);
+            final String  email;
 
-                        if(!userEmail.equals(profile.getString("email"))){
-                            sendData();
-                        }
-                        else {
-                            Toast.makeText(signUp.this, "User is already Present", Toast.LENGTH_SHORT).show();
-                        }
-//                        userProfile.setFullname(profile.getString("fullname"));
-//                        userProfile.setEmail(profile.getString("email"));
-//                        userProfile.setPassword(profile.getString("password"));
-//                        userProfile.setCategory(profile.getString("category"));
-//                        arrayList.add(userProfile);
+            email = userMail.getText().toString();
+
+
+            if(!email.equals("")){
+                StringRequest validate = new StringRequest(Request.Method.POST, validate_url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if(response.equals("Can't create account! exixting user")){
+                                    Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
+                                }else if(response.equals("dont Exist")){
+                                    sendData();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("email",email);
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
+                requestQueue.add(validate);
+
+
+
+            }else {
+                Toast.makeText(signUp.this, "Fill email field", Toast.LENGTH_SHORT).show();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params=new HashMap<>();
-                return params;
-            }
-        };
-       requestQueue.add(request);
+
+
     }
 
 
@@ -142,38 +140,47 @@ public class signUp extends AppCompatActivity {
         email = userMail.getText().toString();
         category = selectedCat.getText().toString();
 
-        if(!name.equals("") && !email.equals("") && !category.equals("") && !(password.equals("") || password.equals("wrong"))){
-            StringRequest request = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(signUp.this, AppHome.class));
-                            finish();
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                    error.printStackTrace();
-                }
-            }){
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("fullname",name);
-                    params.put("email",email);
-                    params.put("category",category);
-                    params.put("password",password);
-                    return params;
-                }
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
-            requestQueue.add(request);
+        if(!name.equals("") || !email.equals("") || !category.equals("") || !newPassword.getText().toString().equals("") || !confirmedPwd.getText().toString().equals("")){
 
 
+                StringRequest signUprequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                fullName.setText("");
+                                userMail.setText("");
+                                newPassword.setText("");
+                                confirmedPwd.setText("");
+                                if(response.equals("Welcome \uD83E\uDD17")){
+                                    Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(signUp.this, LogIn.class));
+                                    finish();
+                                }
 
-        }else {
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(signUp.this, "Can' create account try again later", Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("fullname",name);
+                        params.put("email",email);
+                        params.put("category",category);
+                        params.put("password",password);
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
+                requestQueue.add(signUprequest);
+            }
+
+
+        else {
             Toast.makeText(signUp.this, "All Blanks must be filled", Toast.LENGTH_SHORT).show();
         }
 

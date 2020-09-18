@@ -31,7 +31,7 @@
         <EditText
             android:layout_width="280dp"
             android:inputType="textPassword"
-            android:id="@+id/userPassword"
+            android:id="@+id/luserPassword"
             android:layout_height="wrap_content"
             android:drawablePadding="12dp"
             android:paddingLeft="16dp"
