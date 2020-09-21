@@ -42,7 +42,7 @@ public class signUp extends AppCompatActivity {
     EditText newPassword;
     EditText confirmedPwd;
     RadioButton selectedCat;
-
+ProgressBar progressBar;
 
 
 
@@ -63,6 +63,7 @@ public class signUp extends AppCompatActivity {
         signUpBtn = (Button) findViewById(R.id.signUpBtn);
 //        int selectedId = category.getCheckedRadioButtonId();
 //        selectedCat = (RadioButton) findViewById(selectedId);
+        progressBar = (ProgressBar) findViewById(R.id.sProgressBar);
 
 
         logInbtn.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +149,7 @@ public class signUp extends AppCompatActivity {
                         userMail.setText("");
                         newPassword.setText("");
                         confirmedPwd.setText("");
+                        progressBar.setVisibility(View.VISIBLE);
                         Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(signUp.this, LogIn.class));
                         finish();
@@ -158,6 +160,7 @@ public class signUp extends AppCompatActivity {
             }, new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
+            progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_LONG).show();
             error.printStackTrace();
         }

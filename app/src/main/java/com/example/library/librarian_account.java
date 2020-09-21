@@ -1,8 +1,10 @@
 package com.example.library;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -37,11 +39,67 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
         }else if(id == R.id.requests){
             Toast.makeText(this, "check requests", Toast.LENGTH_SHORT).show();
         }else if(id == R.id.editProfile){
-            Toast.makeText(this, "editProfile", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(librarian_account.this, EditAccount.class));
         }else if(id == R.id.logOut){
-            startActivity(new Intent(librarian_account.this, signUp.class));
-            finish();
+            logOutAlert();
         }
         return false;
+    }
+
+    public void logOutAlert() {
+        // Create the object of
+        // AlertDialog Builder class
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(librarian_account.this);
+
+        // Set the message show for the Alert time
+        builder.setMessage("Want to Logout?");
+
+        // Set Alert Title
+        builder.setTitle("📙 Library");
+
+        // Set Cancelable false
+        // for when the user clicks on the outside
+        // the Dialog Box then it will remain show
+        builder.setCancelable(false);
+
+        // Set the positive button with yes name
+        // OnClickListener method is use of
+        // DialogInterface interface.
+
+        builder
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+                                startActivity(new Intent(librarian_account.this, signUp.class));
+                                finish();
+                            }
+                        });
+
+        // Set the Negative button with No name
+        // OnClickListener method is use
+        // of DialogInterface interface.
+        builder
+                .setNegativeButton(
+                        "No",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

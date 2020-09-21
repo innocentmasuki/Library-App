@@ -86,7 +86,12 @@
 <!--</RelativeLayout>-->
 
 
-
+<ProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/sProgressBar"
+    android:visibility="invisible"
+    android:layout_marginTop="30dp"/>
 
 
 
@@ -96,7 +101,7 @@
             android:id="@+id/signUpBtn"
             android:layout_height="wrap_content"
             android:text="@string/sign_up"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:background="@color/colorPrimary"
             android:textColor="@color/white"
             android:textStyle="bold"/>

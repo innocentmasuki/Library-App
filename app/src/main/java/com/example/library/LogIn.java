@@ -2,6 +2,8 @@ package com.example.library;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothServerSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,8 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LogIn extends AppCompatActivity {
+    TextView lemail;
     Button logInBtn;
-    TextView lemail, lpass;
+    TextView lpass;
+    ProgressBar progressBar;
     String logIn_url = "http://192.168.43.225/library/login.php";
 
     @Override
@@ -33,6 +37,7 @@ public class LogIn extends AppCompatActivity {
 
         lemail = (TextView) findViewById(R.id.luserMail);
         lpass = (TextView) findViewById(R.id.luserPassword);
+        progressBar = (ProgressBar) findViewById(R.id.lprogressBar);
 
         logInBtn = findViewById(R.id.mainlogInBtn);
 
@@ -58,19 +63,24 @@ public class LogIn extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            lemail.setText("");
-                            lpass.setText("");
                             if(response.equals("Welcome")){
+
                                 Toast.makeText(LogIn.this, response, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LogIn.this, AppHome.class));
+                                progressBar.setVisibility(View.VISIBLE);
+                                Intent intent = new Intent(LogIn.this, AppHome.class);
+                                intent.putExtra("userMail",email);
+                                startActivity(intent);
                                 finish();
+
                             }else if(response.equals("Incorrect Password or Mail")){
+                                progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(LogIn.this, response, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(LogIn.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     error.printStackTrace();
                 }

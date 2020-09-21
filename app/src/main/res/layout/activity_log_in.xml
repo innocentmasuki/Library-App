@@ -50,12 +50,17 @@
             android:layout_marginLeft="12dp"
             android:layout_marginTop="10dp"
             />
-
+<ProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
+    android:visibility="invisible"
+    android:id="@+id/lprogressBar"/>
 
         <Button
             android:layout_width="280dp"
             android:id="@+id/mainlogInBtn"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:background="@color/colorPrimary"
             android:textColor="@color/white"
             android:layout_height="wrap_content"

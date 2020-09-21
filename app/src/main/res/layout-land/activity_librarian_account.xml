@@ -6,19 +6,27 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".librarian_account">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/user"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="50dp"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/user"
-            android:layout_marginTop="30dp"
-            />
+        android:layout_marginTop="20dp"
+        android:textAlignment="textStart"
+        android:orientation="vertical"
+        android:gravity="start">
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="John Doe"
             android:textStyle="bold"
@@ -26,21 +34,28 @@
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:textColor="@color/black"
+            android:paddingLeft="10dp"
             android:id="@+id/ausername"
             android:textSize="40sp"
             android:gravity="center_horizontal"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="johndoe@example.com"
             android:textStyle="bold"
             android:textAlignment="center"
+            android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:id="@+id/auseremail"
             android:gravity="center_horizontal"/>
     </LinearLayout>
+
+</LinearLayout>
+
+
+
 
 
 
@@ -51,5 +66,5 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     app:menu="@menu/user_account_menu"
-    />
+    android:paddingStart="10dp" />
 </LinearLayout>
