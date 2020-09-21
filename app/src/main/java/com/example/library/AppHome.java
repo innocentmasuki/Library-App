@@ -15,10 +15,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AppHome extends AppCompatActivity {
 
+    Button userAcount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_home);
+
+        userAcount = (Button) findViewById(R.id.userAccount);
+        userAcount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AppHome.this, librarian_account.class));
+            }
+        });
 
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);

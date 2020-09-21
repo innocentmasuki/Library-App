@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/account_circle/baseline_account_circle_24.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/add/baseline_add_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ad6a43" />
-                            <entry key="outputName" value="ic_account" />
+                            <entry key="outputName" value="ic_add" />
                             <entry key="sourceFile" value="C:\Users\#root\AndroidStudioProjects\Library" />
                           </map>
                         </option>

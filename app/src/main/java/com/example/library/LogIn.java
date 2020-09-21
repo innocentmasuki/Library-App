@@ -41,7 +41,7 @@ public class LogIn extends AppCompatActivity {
             public void onClick(View v) {
                 getData();
             }
-        });
+        }); 
     }
 
     private void getData() {
@@ -52,16 +52,16 @@ public class LogIn extends AppCompatActivity {
         email = lemail.getText().toString();
         password = lpass.getText().toString();
 
-        if(!email.equals("") || !password.equals("")){
+        if(!email.equals("") || !password.equals(""))
+        {
             StringRequest request = new StringRequest(Request.Method.POST, logIn_url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             lemail.setText("");
                             lpass.setText("");
-
-                            if(response.equals("Welcome \uD83E\uDD17")){
-                                Toast.makeText(LogIn.this, response, Toast.LENGTH_LONG).show();
+                            if(response.equals("Welcome")){
+                                Toast.makeText(LogIn.this, response, Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LogIn.this, AppHome.class));
                                 finish();
                             }else if(response.equals("Incorrect Password or Mail")){
@@ -71,7 +71,7 @@ public class LogIn extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(LogIn.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LogIn.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     error.printStackTrace();
                 }
             }){
@@ -85,8 +85,6 @@ public class LogIn extends AppCompatActivity {
             };
             RequestQueue requestQueue = Volley.newRequestQueue(LogIn.this);
             requestQueue.add(request);
-
-
 
         }else {
             Toast.makeText(LogIn.this, "All Blanks must be filled", Toast.LENGTH_SHORT).show();

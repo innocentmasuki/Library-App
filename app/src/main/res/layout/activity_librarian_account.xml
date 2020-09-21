@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".librarian_account">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/user"
+        android:layout_marginTop="30dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="John Doe"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/ausername"
+        android:textSize="40sp"
+        android:gravity="center_horizontal"/>
+
+<com.google.android.material.navigation.NavigationView
+    android:layout_width="match_parent"
+    android:id="@+id/userAccountMenu"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    app:menu="@menu/user_account_menu"
+    android:paddingStart="10dp" />
+</LinearLayout>

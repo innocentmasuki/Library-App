@@ -38,7 +38,6 @@
             android:paddingRight="16dp"
             android:hint="@string/userPassword"
             android:drawableStart="@drawable/ic_lock"
-
             android:autofillHints="@string/userPassword"
             android:gravity="start"
             android:drawableLeft="@drawable/ic_lock"
