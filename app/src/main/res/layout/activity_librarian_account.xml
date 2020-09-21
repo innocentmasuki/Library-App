@@ -21,8 +21,20 @@
         android:textAlignment="center"
         android:paddingTop="10dp"
         android:paddingBottom="5dp"
+        android:textColor="@color/black"
         android:id="@+id/ausername"
         android:textSize="40sp"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="johndoe@example.com"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/auseremail"
         android:gravity="center_horizontal"/>
 
 <com.google.android.material.navigation.NavigationView

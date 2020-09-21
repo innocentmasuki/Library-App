@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".librarian_account"/>
+        <activity android:name=".EditAccount"></activity>
+        <activity android:name=".librarian_account" />
         <activity android:name=".LogIn" />
         <activity android:name=".AppNotification" />
         <activity android:name=".FavBooks" />
