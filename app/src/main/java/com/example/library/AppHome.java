@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,11 +22,17 @@ public class AppHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_home);
 
+         final String logged = (String) getIntent().getStringExtra("userMail");
+         final String fullname = (String) getIntent().getStringExtra("fullname");
+
         userAcount = (Button) findViewById(R.id.userAccount);
         userAcount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AppHome.this, librarian_account.class));
+                Intent intent = new Intent(AppHome.this, librarian_account.class);
+                intent.putExtra("Mail",logged);
+                intent.putExtra("fullname",fullname);
+                startActivity(intent);
             }
         });
 

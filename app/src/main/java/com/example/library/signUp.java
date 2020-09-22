@@ -127,7 +127,8 @@ ProgressBar progressBar;
 
     public void sendData(){
 
-         final String name, email, category, password;
+
+        final String name, email, category, password;
 
         if(newPassword.getText().toString().equals(confirmedPwd.getText().toString())){
             password = confirmedPwd.getText().toString();
@@ -151,7 +152,9 @@ ProgressBar progressBar;
                         confirmedPwd.setText("");
                         progressBar.setVisibility(View.VISIBLE);
                         Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(signUp.this, LogIn.class));
+                        Intent intent = new Intent(signUp.this, LogIn.class);
+                        intent.putExtra("fullname", name);
+                        startActivity(intent);
                         finish();
                     }
 

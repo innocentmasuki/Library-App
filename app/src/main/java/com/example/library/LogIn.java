@@ -53,6 +53,7 @@ public class LogIn extends AppCompatActivity {
 
 
         final String  email, password;
+        final String fullname =  getIntent().getStringExtra("fullname");
 
         email = lemail.getText().toString();
         password = lpass.getText().toString();
@@ -69,6 +70,7 @@ public class LogIn extends AppCompatActivity {
                                 progressBar.setVisibility(View.VISIBLE);
                                 Intent intent = new Intent(LogIn.this, AppHome.class);
                                 intent.putExtra("userMail",email);
+                                intent.putExtra("fullname",fullname);
                                 startActivity(intent);
                                 finish();
 
