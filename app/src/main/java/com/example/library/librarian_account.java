@@ -88,19 +88,22 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        final String logged = (String) getIntent().getStringExtra("Mail");
+        final String passed = (String) getIntent().getStringExtra("userPass");
+
+
         int id = menuItem.getItemId();
         if (id == R.id.addBooks){
-            Toast.makeText(this, "adding books...", Toast.LENGTH_SHORT).show();
+            Intent addbooks = new Intent(librarian_account.this, AddBooks.class);
+            addbooks.putExtra("Mail",logged);
+            startActivity(addbooks);
+            finish();
         }else if(id == R.id.requests){
             Toast.makeText(this, "check requests", Toast.LENGTH_SHORT).show();
         }else if(id == R.id.editProfile){
-            final String logged = (String) getIntent().getStringExtra("Mail");
-            final String passed = (String) getIntent().getStringExtra("userPass");
-
-
-            Intent intent = new Intent(librarian_account.this, EditAccount.class);
-            intent.putExtra("Mail",logged);
-            startActivity(intent);
+            Intent edit = new Intent(librarian_account.this, EditAccount.class);
+            edit.putExtra("Mail",logged);
+            startActivity(edit);
             finish();
         }else if(id == R.id.logOut){
             logOutAlert();
