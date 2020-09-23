@@ -37,7 +37,8 @@ import java.net.URL;
 public class AppHome extends AppCompatActivity {
 
     ImageView userAcount;
-    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
+    String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
+//    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +86,7 @@ public class AppHome extends AppCompatActivity {
                 intent.putExtra("Mail",logged);
                 intent.putExtra("fullname",fullname);
                 startActivity(intent);
+                finish();
             }
         });
 

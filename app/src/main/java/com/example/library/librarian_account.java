@@ -32,7 +32,8 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
     ImageView imageView;
     TextView userMail, fullName;
 
-    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
+    String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
+//    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
 
 
     @Override
@@ -171,5 +172,6 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
         Intent intent = new Intent(librarian_account.this, AppHome.class);
         intent.putExtra("Mail",logged);
         startActivity(intent);
+        finish();
     }
 }

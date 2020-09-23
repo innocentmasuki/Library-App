@@ -12,12 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AddBooks"></activity>
         <activity android:name=".EditAccount" />
         <activity android:name=".librarian_account" />
         <activity android:name=".LogIn" />
         <activity android:name=".AppNotification" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-                  android:theme="@style/AppCustomTheme" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/AppCustomTheme" />
         <activity android:name=".FavBooks" />
         <activity android:name=".AppSearch" />
         <activity android:name=".AppHome" />

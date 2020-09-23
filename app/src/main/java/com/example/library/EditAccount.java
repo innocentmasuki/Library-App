@@ -28,9 +28,13 @@ public class EditAccount extends AppCompatActivity {
     Button deleteAccount, saveName, savePwd;
     TextView changedName, newChPassword, conChPassword;
 
-    String update_username_url = "http://192.168.43.225/library/update_userName.php";
-    String update_password_url = "http://192.168.43.225/library/update_password.php";
-    String deleteAccount_url = "http://192.168.43.225/library/deleteAccount.php";
+//    String update_username_url = "http://192.168.43.225/library/update_userName.php";
+//    String update_password_url = "http://192.168.43.225/library/update_password.php";
+//    String deleteAccount_url = "http://192.168.43.225/library/deleteAccount.php";
+
+    String update_username_url = "http://192.168.137.1/library/update_userName.php";
+    String update_password_url = "http://192.168.137.1/library/update_password.php";
+    String deleteAccount_url = "http://192.168.137.1/library/deleteAccount.php";
 
 
     @Override
