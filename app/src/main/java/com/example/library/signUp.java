@@ -1,17 +1,30 @@
 package com.example.library;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,14 +37,30 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 
 public class signUp extends AppCompatActivity {
@@ -43,27 +72,50 @@ public class signUp extends AppCompatActivity {
     EditText confirmedPwd;
     RadioButton selectedCat;
 ProgressBar progressBar;
+ImageView userImage;
+ImageView userImage2;
+
+Uri uri;
+
+
+//images start here
+Bitmap bitmap;
+
+    boolean check = true;
+
+    ProgressDialog progressDialog ;
+
 
 
 
     String validate_url = "http://192.168.43.225/library/validate.php";
-    String url = "http://192.168.43.225/library/register.php";
+    String Surl = "http://192.168.43.225/library/image_upload.php";
+    String Sendurl = "http://192.168.43.225/library/register.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        newPassword = (EditText) findViewById(R.id.createdPassword);
-        confirmedPwd = (EditText) findViewById(R.id.confirmedPassword);
-        fullName = (EditText) findViewById(R.id.userName);
-        userMail = (EditText) findViewById(R.id.userMail);
+        newPassword = findViewById(R.id.createdPassword);
+        confirmedPwd =  findViewById(R.id.confirmedPassword);
+        fullName = findViewById(R.id.userName);
+        userMail =  findViewById(R.id.userMail);
 //        category = (RadioGroup) findViewById(R.id.category);
-        logInbtn  =  (Button) findViewById(R.id.logInBtn);
-        signUpBtn = (Button) findViewById(R.id.signUpBtn);
+        logInbtn  =   findViewById(R.id.logInBtn);
+        signUpBtn =  findViewById(R.id.signUpBtn);
 //        int selectedId = category.getCheckedRadioButtonId();
 //        selectedCat = (RadioButton) findViewById(selectedId);
-        progressBar = (ProgressBar) findViewById(R.id.sProgressBar);
+        progressBar = findViewById(R.id.sProgressBar);
+        userImage = findViewById(R.id.profileImage);
+        userImage2 = findViewById(R.id.compare);
+
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CropImage.startPickImageActivity(signUp.this);
+            }
+        });
 
 
         logInbtn.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +135,8 @@ ProgressBar progressBar;
             }
 
         });
+
+
     }
 
 
@@ -101,7 +155,13 @@ ProgressBar progressBar;
                             if(response.equals("Can't create account! exixting user")){
                                 Toast.makeText(signUp.this, response, Toast.LENGTH_SHORT).show();
                             }else if(response.equals("dont Exist")){
-                                sendData();
+                                if(!(userImage.getDrawable() == userImage2.getDrawable())){
+                                    sendData();
+                                    ImageUploadToServerFunction();
+                                }else {
+                                    Toast.makeText(signUp.this, "Choose Image", Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -141,17 +201,16 @@ ProgressBar progressBar;
 //        category = selectedCat.getText().toString();
 
             if (!password.equals("wrong")){
-    StringRequest signUprequest = new StringRequest(Request.Method.POST, url,
+    StringRequest signUprequest = new StringRequest(Request.Method.POST, Sendurl,
             new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     if(response.equals("Welcome \uD83E\uDD17")){
-                        fullName.setText("");
                         userMail.setText("");
                         newPassword.setText("");
                         confirmedPwd.setText("");
                         progressBar.setVisibility(View.VISIBLE);
-                        Toast.makeText(signUp.this, response, Toast.LENGTH_LONG).show();
+                        Toast.makeText(signUp.this, "Log In", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(signUp.this, LogIn.class);
                         intent.putExtra("fullname", name);
                         startActivity(intent);
@@ -191,6 +250,193 @@ ProgressBar progressBar;
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
+
+            Uri imageuri = CropImage.getPickImageResultUri(this, data);
+            if(CropImage.isReadExternalStoragePermissionsRequired(this, imageuri)){
+                uri = imageuri;
+                requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            }
+            else {
+                startCrop(imageuri);
+            }
+
+        }
+
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if(resultCode == RESULT_OK){
+//                userImage.setImageURI(result.getUri());
+
+                Uri uri = result.getUri();
+
+                try {
+
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+                    userImage.setImageBitmap(bitmap);
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    private void startCrop(Uri imageuri) {
+        CropImage.activity(imageuri)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .setMultiTouchEnabled(true)
+                .start(this);
+    }
+
+    public class ImageProcessClass{
+
+        public String ImageHttpRequest(String requestURL,HashMap<String, String> PData) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            try {
+
+                URL url;
+                HttpURLConnection httpURLConnectionObject ;
+                OutputStream OutPutStream;
+                BufferedWriter bufferedWriterObject ;
+                BufferedReader bufferedReaderObject ;
+                int RC ;
+
+                url = new URL(requestURL);
+
+                httpURLConnectionObject = (HttpURLConnection) url.openConnection();
+
+                httpURLConnectionObject.setReadTimeout(19000);
+
+                httpURLConnectionObject.setConnectTimeout(19000);
+
+                httpURLConnectionObject.setRequestMethod("POST");
+
+                httpURLConnectionObject.setDoInput(true);
+
+                httpURLConnectionObject.setDoOutput(true);
+
+                OutPutStream = httpURLConnectionObject.getOutputStream();
+
+                bufferedWriterObject = new BufferedWriter(
+
+                        new OutputStreamWriter(OutPutStream, "UTF-8"));
+
+                bufferedWriterObject.write(bufferedWriterDataFN(PData));
+
+                bufferedWriterObject.flush();
+
+                bufferedWriterObject.close();
+
+                OutPutStream.close();
+
+                RC = httpURLConnectionObject.getResponseCode();
+
+                if (RC == HttpsURLConnection.HTTP_OK) {
+
+                    bufferedReaderObject = new BufferedReader(new InputStreamReader(httpURLConnectionObject.getInputStream()));
+
+                    stringBuilder = new StringBuilder();
+
+                    String RC2;
+
+                    while ((RC2 = bufferedReaderObject.readLine()) != null){
+
+                        stringBuilder.append(RC2);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return stringBuilder.toString();
+        }
+
+        private String bufferedWriterDataFN(HashMap<String, String> HashMapParams) throws UnsupportedEncodingException {
+
+            StringBuilder stringBuilderObject;
+
+            stringBuilderObject = new StringBuilder();
+
+            for (Map.Entry<String, String> KEY : HashMapParams.entrySet()) {
+
+                if (check)
+
+                    check = false;
+                else
+                    stringBuilderObject.append("&");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getKey(), "UTF-8"));
+
+                stringBuilderObject.append("=");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getValue(), "UTF-8"));
+            }
+
+            return stringBuilderObject.toString();
+        }
+
+    }
+
+
+    public void ImageUploadToServerFunction(){
+
+        ByteArrayOutputStream byteArrayOutputStreamObject ;
+
+        byteArrayOutputStreamObject = new ByteArrayOutputStream();
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+
+        byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
+
+        final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+
+        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+
+                super.onPostExecute(response);
+                // Setting image as transparent after done uploading.
+                userImage.setImageResource(android.R.color.transparent);
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String email = userMail.getText().toString().trim();
+                String name = fullName.getText().toString().replace(" ", "");
+                ImageProcessClass imageProcessClass = new ImageProcessClass();
+                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+                HashMapParams.put("ImageData", ConvertImage);
+                HashMapParams.put("email", email);
+                HashMapParams.put("fullname", name);
+
+                return imageProcessClass.ImageHttpRequest(Surl, HashMapParams);
+            }
+        }
+        AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
+        AsyncTaskUploadClassOBJ.execute();
+    }
 
 
     public void onBackPressed() {

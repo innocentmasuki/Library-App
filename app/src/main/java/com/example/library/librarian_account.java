@@ -14,10 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,15 +39,14 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_librarian_account);
-        final String logged = (String) getIntent().getStringExtra("Mail");
-        final String fullname = (String) getIntent().getStringExtra("fullname");
+        final String logged =  getIntent().getStringExtra("Mail");
+//        final String fullname = (String) getIntent().getStringExtra("fullname");
 
         imageView =  findViewById(R.id.images);
         userMail =  findViewById(R.id.auseremail);
         fullName =  findViewById(R.id.ausername);
-        userMail.setText(logged);
-        fullName.setText(fullname);
-        final JSONObject[] userJsonObject = new JSONObject[1];
+
+
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, getUserInfo_url, null,
                 new Response.Listener<JSONArray>() {
@@ -52,7 +54,12 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
                     public void onResponse(JSONArray response) {
                             for(int i = 0; i < response.length(); i++){
                                 try {
-                                    userJsonObject[0] = response.getJSONObject(i);
+                                    JSONObject jsonObject = response.getJSONObject(i);
+                                    if(jsonObject.getString("Email").equals(logged)){
+                                            userMail.setText(logged);
+                                            fullName.setText(jsonObject.getString("Name"));
+                                            Picasso.get().load(jsonObject.getString("Imagepath")).into(imageView);
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -65,16 +72,11 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
 
                     }
                 });
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(librarian_account.this, "logged", Toast.LENGTH_SHORT).show();
-            }
-        });
+        RequestQueue requestQueue = Volley.newRequestQueue(librarian_account.this);
+        requestQueue.add(jsonArrayRequest);
 
 
-        navigationView = (NavigationView) findViewById(R.id.userAccountMenu);
+        navigationView = findViewById(R.id.userAccountMenu);
 
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
@@ -94,11 +96,11 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
             final String logged = (String) getIntent().getStringExtra("Mail");
             final String passed = (String) getIntent().getStringExtra("userPass");
 
-//            Toast.makeText(this, logged, Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(librarian_account.this, EditAccount.class);
-            intent.putExtra("userMail",logged);
+            intent.putExtra("Mail",logged);
             startActivity(intent);
+            finish();
         }else if(id == R.id.logOut){
             logOutAlert();
         }
@@ -160,5 +162,14 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
                         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+
+
+    public void onBackPressed(){
+        final String logged =  getIntent().getStringExtra("Mail");
+        Intent intent = new Intent(librarian_account.this, AppHome.class);
+        intent.putExtra("Mail",logged);
+        startActivity(intent);
     }
 }

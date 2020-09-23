@@ -75,7 +75,7 @@ public class EditAccount extends AppCompatActivity {
         newPass = newChPassword.getText().toString();
         conPass = conChPassword.getText().toString();
 
-        final String logged =  getIntent().getStringExtra("userMail");
+        final String logged =  getIntent().getStringExtra("Mail");
 
         if (!newPass.equals("") || !conPass.equals("")){
             if(newPass.equals(conPass)){
@@ -120,7 +120,7 @@ public class EditAccount extends AppCompatActivity {
     }
 
     public void changeName() {
-        final String logged =  getIntent().getStringExtra("userMail");
+        final String logged =  getIntent().getStringExtra("Mail");
         final String userName = changedName.getText().toString();
 
         StringRequest request = new StringRequest(Request.Method.POST, update_username_url,
@@ -212,7 +212,7 @@ public class EditAccount extends AppCompatActivity {
     }
 
     public void deleleUserInfo() {
-        final String logged =  getIntent().getStringExtra("userMail");
+        final String logged =  getIntent().getStringExtra("Mail");
         StringRequest request = new StringRequest(Request.Method.POST, deleteAccount_url,
                 new Response.Listener<String>() {
                     @Override
@@ -246,8 +246,12 @@ public class EditAccount extends AppCompatActivity {
     }
 
     public void onBackPressed(){
-        startActivity(new Intent(EditAccount.this, librarian_account.class));
-        finish();
+        final String logged =  getIntent().getStringExtra("Mail");
+        Intent intent = new Intent(EditAccount.this, librarian_account.class);
+        intent.putExtra("Mail",logged);
+        startActivity(intent);
     }
+
+
 }
 

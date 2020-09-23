@@ -11,8 +11,8 @@
     android:layout_height="wrap_content"
     android:paddingBottom="20dp"
     android:orientation="horizontal">
-    <ImageView
-        android:layout_width="wrap_content"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="96dp"
         android:layout_height="wrap_content"
         android:src="@drawable/user"
         android:layout_marginLeft="30dp"

@@ -6,26 +6,78 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class AppHome extends AppCompatActivity {
 
-    Button userAcount;
+    ImageView userAcount;
+    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_home);
 
-         final String logged = (String) getIntent().getStringExtra("userMail");
-         final String fullname = (String) getIntent().getStringExtra("fullname");
+         final String logged =  getIntent().getStringExtra("Mail");
+         final String fullname =  getIntent().getStringExtra("fullname");
 
-        userAcount = (Button) findViewById(R.id.userAccount);
+        userAcount = findViewById(R.id.userAccount);
+
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, getUserInfo_url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        for(int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                if(jsonObject.getString("Email").equals(logged)){
+
+                                    Picasso.get().load(jsonObject.getString("Imagepath")).into(userAcount);
+
+                                }
+                            } catch (JSONException  e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(AppHome.this);
+        requestQueue.add(jsonArrayRequest);
+
+
         userAcount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

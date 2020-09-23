@@ -22,15 +22,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:orientation="horizontal">
-                <Button
+<!--                <ImageView-->
+<!--                    android:id="@+id/userAccount"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_marginLeft="340dp"-->
+<!--                    android:layout_marginRight="50dp"-->
+<!--                    android:background="@drawable/ic_account"-->
+<!--                    android:layout_marginStart="340dp"-->
+<!--                    android:layout_marginEnd="50dp" />-->
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/userAccount"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:src="@drawable/ic_account"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="@android:color/darker_gray"
                     android:layout_marginLeft="340dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@drawable/ic_account"
-                    android:layout_marginStart="340dp"
-                    android:layout_marginEnd="50dp" />
+                    android:layout_marginStart="340dp"/>
             </LinearLayout>
 
 

@@ -69,7 +69,7 @@ public class LogIn extends AppCompatActivity {
                                 Toast.makeText(LogIn.this, response, Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.VISIBLE);
                                 Intent intent = new Intent(LogIn.this, AppHome.class);
-                                intent.putExtra("userMail",email);
+                                intent.putExtra("Mail",email);
                                 intent.putExtra("fullname",fullname);
                                 startActivity(intent);
                                 finish();
