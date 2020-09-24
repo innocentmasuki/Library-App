@@ -3,7 +3,10 @@ package com.example.library;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,12 +36,19 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class AppHome extends AppCompatActivity {
 
     ImageView userAcount;
     String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
 //    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
+
+
+    String bookInfoUrl = "http://192.168.137.1/library/get_books.php";
+    Context context;
+    ArrayList<Books> arrayList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +56,7 @@ public class AppHome extends AppCompatActivity {
 
          final String logged =  getIntent().getStringExtra("Mail");
          final String fullname =  getIntent().getStringExtra("fullname");
+
 
         userAcount = findViewById(R.id.userAccount);
 
@@ -77,6 +88,9 @@ public class AppHome extends AppCompatActivity {
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(AppHome.this);
         requestQueue.add(jsonArrayRequest);
+
+
+
 
 
         userAcount.setOnClickListener(new View.OnClickListener() {

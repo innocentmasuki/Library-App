@@ -361,68 +361,22 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:paddingStart="20dp" />
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="270dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
-                    android:layout_marginVertical="20dp"
-                    >
 
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="120dp"
-                        app:cardElevation="2dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/black"
-                        android:layout_height="250dp"
-                        android:layout_marginStart="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-                            <Button
-                                android:layout_width="match_parent"
-                                android:layout_height="170dp"
-                                />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="the black-box"
-                                android:textAllCaps="true"
-                                android:textStyle="bold"
-                                android:paddingLeft="8dp"
-                                android:paddingRight="8dp"
-                                android:textColor="@color/colorPrimary"
-                                android:paddingStart="8dp" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="8dp"
-                                android:paddingRight="8dp"
-                                android:textSize="12sp"
-                                android:text="Author: John Doe"
-                                android:paddingStart="8dp" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-
-                </LinearLayout>
+               <androidx.recyclerview.widget.RecyclerView
+                   android:layout_width="wrap_content"
+                   android:layout_height="300dp"
+                   android:layout_marginTop="20dp"
+                   android:layout_marginLeft="20dp"
+                   android:background="@color/white"
+                   android:id="@+id/recyclerView"
+                   android:layout_marginStart="20dp" />
 
 
 
 
 
 
-            </HorizontalScrollView>
 
 
 

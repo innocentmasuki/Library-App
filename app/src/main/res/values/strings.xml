@@ -17,9 +17,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="image_cover">Image Cover</string>
-    <string name="book_title">Book Title</string>
     <string name="book_s_descriptions">Book\'s Descriptions</string>
     <string name="isbn">ISBN</string>
     <string name="author">Author</string>
     <string name="add_book">add book</string>
+    <string name="book_cover">Book cover</string>
+    <string name="book_title">Book Title</string>
 </resources>
