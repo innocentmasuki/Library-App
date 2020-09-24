@@ -66,8 +66,6 @@ public class LogIn extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             if(response.equals("Welcome")){
-
-                                Toast.makeText(LogIn.this, response, Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.VISIBLE);
                                 Intent intent = new Intent(LogIn.this, AppHome.class);
                                 intent.putExtra("Mail",email);

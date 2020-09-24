@@ -250,9 +250,6 @@ Bitmap bitmap;
                 Toast.makeText(this, "Password Mismatch", Toast.LENGTH_SHORT).show();
             }
 
-
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

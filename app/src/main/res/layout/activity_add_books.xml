@@ -33,6 +33,7 @@
         android:layout_height="200dp"
         android:layout_marginTop="30dp"
         android:visibility="gone"
+        android:id="@+id/book_cover2"
         android:contentDescription="@string/image_cover" />
 
     <EditText
@@ -49,7 +50,8 @@
         android:paddingRight="20dp"
         android:gravity="start"
         android:paddingStart="20dp"
-        android:autofillHints="@string/book_title" />
+        android:autofillHints="@string/book_title"
+        android:inputType="textCapCharacters" />
 
     <EditText
         android:layout_width="match_parent"
@@ -64,7 +66,9 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:gravity="start"
-        android:paddingStart="20dp" />
+        android:paddingStart="20dp"
+        android:autofillHints="@string/author"
+        android:inputType="textCapWords" />
 
     <EditText
         android:layout_width="match_parent"
@@ -77,10 +81,11 @@
         android:textAlignment="textStart"
         android:paddingLeft="20dp"
         android:layout_marginTop="10dp"
-
         android:paddingRight="20dp"
         android:gravity="start"
-        android:paddingStart="20dp" />
+        android:paddingStart="20dp"
+        android:autofillHints="@string/isbn"
+        android:inputType="number" />
 
     <EditText
         android:layout_width="match_parent"
@@ -89,6 +94,7 @@
         android:id="@+id/description"
         android:textStyle="normal"
         android:minLines="5"
+        android:lines="5"
         android:maxLines="20"
         android:textAllCaps="true"
         android:layout_marginHorizontal="20dp"
@@ -96,13 +102,14 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:layout_marginTop="10dp"
-
         android:gravity="start"
-        android:paddingStart="20dp" />
+        android:paddingStart="20dp"
+        android:autofillHints="@string/book_s_descriptions"
+        android:inputType="text" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="add book"
+        android:text="@string/add_book"
         android:paddingHorizontal="15dp"
         android:id="@+id/addbookBtn"
         android:textColor="@color/white"

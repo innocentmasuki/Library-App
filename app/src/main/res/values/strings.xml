@@ -21,4 +21,5 @@
     <string name="book_s_descriptions">Book\'s Descriptions</string>
     <string name="isbn">ISBN</string>
     <string name="author">Author</string>
+    <string name="add_book">add book</string>
 </resources>
