@@ -28,13 +28,13 @@ public class EditAccount extends AppCompatActivity {
     Button deleteAccount, saveName, savePwd;
     TextView changedName, newChPassword, conChPassword;
 
-//    String update_username_url = "http://192.168.43.225/library/update_userName.php";
-//    String update_password_url = "http://192.168.43.225/library/update_password.php";
-//    String deleteAccount_url = "http://192.168.43.225/library/deleteAccount.php";
+    String update_username_url = "http://192.168.43.225/library/update_userName.php";
+    String update_password_url = "http://192.168.43.225/library/update_password.php";
+    String deleteAccount_url = "http://192.168.43.225/library/deleteAccount.php";
 
-    String update_username_url = "http://192.168.137.1/library/update_userName.php";
-    String update_password_url = "http://192.168.137.1/library/update_password.php";
-    String deleteAccount_url = "http://192.168.137.1/library/deleteAccount.php";
+//    String update_username_url = "http://192.168.137.1/library/update_userName.php";
+//    String update_password_url = "http://192.168.137.1/library/update_password.php";
+//    String deleteAccount_url = "http://192.168.137.1/library/deleteAccount.php";
 
 
     @Override
@@ -188,10 +188,12 @@ public class EditAccount extends AppCompatActivity {
                                 .OnClickListener() {
 
                             @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which)
+                            public void onClick(DialogInterface dialog, int which)
                             {
                                 deleleUserInfo();
+                                Toast.makeText(EditAccount.this, "Account Deleted, Create New", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(EditAccount.this, signUp.class));
+                                finish();
                             }
                         });
 
@@ -221,14 +223,7 @@ public class EditAccount extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.equals("Deleted")){
-                            Toast.makeText(EditAccount.this, "Account Deleted, Create New", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(EditAccount.this, signUp.class));
-                            finish();
 
-                        }else if(response.equals("Error Occured")){
-                            Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
-                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -254,6 +249,7 @@ public class EditAccount extends AppCompatActivity {
         Intent intent = new Intent(EditAccount.this, librarian_account.class);
         intent.putExtra("Mail",logged);
         startActivity(intent);
+        finish();
     }
 
 

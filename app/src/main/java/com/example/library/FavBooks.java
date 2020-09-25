@@ -16,6 +16,8 @@ public class FavBooks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav_books);
 
+        final String logged =  getIntent().getStringExtra("Mail");
+
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -28,17 +30,23 @@ public class FavBooks extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.appSearch:
-                        startActivity(new Intent(getApplicationContext(), AppSearch.class));
+                        Intent search = new Intent(getApplicationContext(), AppSearch.class);
+                        search.putExtra("Mail",logged);
+                        startActivity(search);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
                     case R.id.appHome:
-                        startActivity(new Intent(getApplicationContext(), AppHome.class));
+                        Intent home = new Intent(getApplicationContext(), AppHome.class);
+                        home.putExtra("Mail",logged);
+                        startActivity(home);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
                     case R.id.appNotification:
-                        startActivity(new Intent(getApplicationContext(), AppNotification.class));
+                        Intent notification = new Intent(getApplicationContext(), AppNotification.class);
+                        notification.putExtra("Mail",logged);
+                        startActivity(notification);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
@@ -51,7 +59,10 @@ public class FavBooks extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), AppHome.class));
+        final String logged =  getIntent().getStringExtra("Mail");
+        Intent intent = new Intent(getApplicationContext(), AppHome.class);
+        intent.putExtra("Mail",logged);
+        startActivity(intent);
         overridePendingTransition(1,1);
         finish();
     }

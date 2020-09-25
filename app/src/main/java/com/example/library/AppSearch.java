@@ -15,6 +15,8 @@ public class AppSearch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_search);
+        final String logged =  getIntent().getStringExtra("Mail");
+
 
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -28,17 +30,23 @@ public class AppSearch extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.appHome:
-                        startActivity(new Intent(getApplicationContext(), AppHome.class));
+                        Intent home = new Intent(getApplicationContext(), AppHome.class);
+                        home.putExtra("Mail",logged);
+                        startActivity(home);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
                     case R.id.favBooks:
-                        startActivity(new Intent(getApplicationContext(), FavBooks.class));
+                        Intent fav = new Intent(getApplicationContext(), FavBooks.class);
+                        fav.putExtra("Mail",logged);
+                        startActivity(fav);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
                     case R.id.appNotification:
-                        startActivity(new Intent(getApplicationContext(), AppNotification.class));
+                        Intent notification = new Intent(getApplicationContext(), AppNotification.class);
+                        notification.putExtra("Mail",logged);
+                        startActivity(notification);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
@@ -51,7 +59,10 @@ public class AppSearch extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), AppHome.class));
+        final String logged =  getIntent().getStringExtra("Mail");
+        Intent intent = new Intent(getApplicationContext(), AppHome.class);
+        intent.putExtra("Mail",logged);
+        startActivity(intent);
         overridePendingTransition(1,1);
         finish();
     }

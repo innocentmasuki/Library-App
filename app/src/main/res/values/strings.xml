@@ -23,4 +23,9 @@
     <string name="add_book">add book</string>
     <string name="book_cover">Book cover</string>
     <string name="book_title">Book Title</string>
+    <string name="background_image">background_image</string>
+    <string name="details">Details</string>
+    <string name="borrowed">Borrowed</string>
+    <string name="borrow">Borrow</string>
+    <string name="request">Request</string>
 </resources>

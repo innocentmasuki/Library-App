@@ -39,19 +39,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class AppHome extends AppCompatActivity {
+public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemClickListener {
 
     ImageView userAcount;
+        public  static final String COVER_URL = "coverUrl";
+        public  static final String TITLE = "title";
+        public  static final String AUTHOR = "author";
+        public  static final String ISBN = "isbn";
+        public  static final String UPLOADED_BY = "uploadedBy";
+        public  static final String AVAILABLE = "available";
+        public  static final String CATEGORY = "category";
+        public  static final String DESCRIPTIONS = "descriptions";
 
 
-    String bookInfoUrl = "http://192.168.137.1/library/get_books.php";
-        String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
+//    String bookInfoUrl = "http://192.168.137.1/library/get_books.php";
+//        String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
 
 
-//
-//    String bookInfoUrl = "http://192.168.43.225/library/get_books.php";
-//    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
-//
+
+    String bookInfoUrl = "http://192.168.43.225/library/get_books.php";
+    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
+
 
     private RecyclerView recentsRecyclerView;
     private  BooksAdapter recentBooksAdapter;
@@ -96,19 +104,16 @@ public class AppHome extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        error.printStackTrace();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(AppHome.this);
         requestQueue.add(jsonArrayRequest);
 
-
-
-
-
         userAcount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(AppHome.this, librarian_account.class);
                 intent.putExtra("Mail",logged);
                 intent.putExtra("fullname",fullname);
@@ -119,27 +124,31 @@ public class AppHome extends AppCompatActivity {
 
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         //Set Home Selected
         bottomNavigationView.setSelectedItemId(R.id.appHome);
-
         //perform itemSelectListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.appSearch:
-                        startActivity(new Intent(getApplicationContext(), AppSearch.class));
+                        Intent search = new Intent(getApplicationContext(), AppSearch.class);
+                        search.putExtra("Mail",logged);
+                        startActivity(search);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
                     case R.id.favBooks:
-                        startActivity(new Intent(getApplicationContext(), FavBooks.class));
+                        Intent fav = new Intent(getApplicationContext(), FavBooks.class);
+                        fav.putExtra("Mail",logged);
+                        startActivity(fav);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
                     case R.id.appNotification:
-                        startActivity(new Intent(getApplicationContext(), AppNotification.class));
+                        Intent notification = new Intent(getApplicationContext(), AppNotification.class);
+                        notification.putExtra("Mail",logged);
+                        startActivity(notification);
                         overridePendingTransition(1,1);
                         finish();
                         return true;
@@ -163,11 +172,16 @@ public class AppHome extends AppCompatActivity {
                                 String Title = jsonObject.getString("Title");
                                 String Cover = jsonObject.getString("Cover");
                                 String Author = jsonObject.getString("Author");
-                                recentBookList.add(new Books(Title, Author,Cover));
+                                String isbn = jsonObject.getString("isbn");
+                                String remaining = jsonObject.getString("Remaining");
+                                String category = jsonObject.getString("Category");
+                                String descripts = jsonObject.getString("Description");
+                                String uploadedby  = jsonObject.getString("Uploadedby");
+                                recentBookList.add(new Books(Title, Author,Cover, isbn, category, uploadedby, remaining, descripts));
 
                                 recentBooksAdapter = new BooksAdapter(AppHome.this, recentBookList);
                                 recentsRecyclerView.setAdapter(recentBooksAdapter);
-
+                                recentBooksAdapter.setOnItemClickListener(AppHome.this);
                             }
                         }
                         catch (JSONException  e) {
@@ -184,9 +198,6 @@ public class AppHome extends AppCompatActivity {
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(AppHome.this);
         requestQueue.add(jsonArrayRequest);
-
-
-
     }
 
     @Override
@@ -254,6 +265,24 @@ public class AppHome extends AppCompatActivity {
 
         // Show the Alert Dialog box
         alertDialog.show();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        final String logged =  getIntent().getStringExtra("Mail");
+        Intent intent = new Intent(this, BookDetails.class);
+        Books clickedItem = recentBookList.get(position);
+        intent.putExtra(COVER_URL, clickedItem.getCover());
+        intent.putExtra(TITLE, clickedItem.getTitle());
+        intent.putExtra("Mail",logged);
+        intent.putExtra(AUTHOR, clickedItem.getAuthor());
+        intent.putExtra(ISBN, clickedItem.getIsbn());
+        intent.putExtra(UPLOADED_BY, clickedItem.getUploadedBy());
+        intent.putExtra(AVAILABLE, clickedItem.getAvailable());
+        intent.putExtra(CATEGORY, clickedItem.getCategory());
+        intent.putExtra(DESCRIPTIONS, clickedItem.getDescript());
+        startActivity(intent);
+        finish();
     }
 }
 

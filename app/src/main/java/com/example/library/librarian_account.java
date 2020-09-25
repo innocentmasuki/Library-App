@@ -35,10 +35,10 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
     ImageView imageView;
     TextView userMail, fullName;
 
-    String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
+//    String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
 
 
-//    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
+    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
 
 
     @Override
@@ -106,7 +106,6 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         final String logged = (String) getIntent().getStringExtra("Mail");
-        final String passed = (String) getIntent().getStringExtra("userPass");
 
 
         int id = menuItem.getItemId();

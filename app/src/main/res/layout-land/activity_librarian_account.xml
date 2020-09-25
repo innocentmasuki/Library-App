@@ -14,7 +14,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="96dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/user"
+        android:id="@+id/images"
+        android:src="@drawable/ic_account"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         />
@@ -22,13 +23,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
         android:textAlignment="textStart"
         android:orientation="vertical"
         android:gravity="start">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="John Doe"
+            android:text="Your Name"
             android:textStyle="bold"
             android:textAlignment="center"
             android:paddingTop="10dp"
@@ -42,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="johndoe@example.com"
+            android:text="yourname@example.com"
             android:textStyle="bold"
             android:textAlignment="center"
             android:paddingLeft="20dp"
@@ -59,12 +61,12 @@
 
 
 
-<com.google.android.material.navigation.NavigationView
-    android:layout_width="match_parent"
-    android:id="@+id/userAccountMenu"
-    android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    app:menu="@menu/user_account_menu"
-    android:paddingStart="10dp" />
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="match_parent"
+        android:id="@+id/userAccountMenu"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:menu="@menu/user_account_menu"
+        />
 </LinearLayout>

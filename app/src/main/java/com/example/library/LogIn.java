@@ -28,8 +28,8 @@ public class LogIn extends AppCompatActivity {
     Button logInBtn;
     TextView lpass;
     ProgressBar progressBar;
-//    String logIn_url = "http://192.168.43.225/library/login.php";
-    String logIn_url = "http://192.168.137.1/library/login.php";
+    String logIn_url = "http://192.168.43.225/library/login.php";
+//    String logIn_url = "http://192.168.137.1/library/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
