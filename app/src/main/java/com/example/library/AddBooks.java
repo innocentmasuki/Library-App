@@ -50,6 +50,10 @@ public class AddBooks extends AppCompatActivity {
     String add_info_url = "http://192.168.137.1/library/book_info_upload.php";
     String add_cover_url = "http://192.168.137.1/library/add_book.php";
     String validate_url = "http://192.168.137.1/library/validate_book.php";
+
+//    String add_info_url = "http://192.168.43.225/library/book_info_upload.php";
+//    String add_cover_url = "http://192.168.43.225/library/add_book.php";
+//    String validate_url = "http://192.168.43.225/library/validate_book.php";
     Uri uri;
     Bitmap bitmap;
     Button addbookBtn;
@@ -224,7 +228,7 @@ public class AddBooks extends AppCompatActivity {
     private void startCrop(Uri imageuri) {
         CropImage.activity(imageuri)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(9, 16)
+                .setAspectRatio(11, 16)
                 .setMultiTouchEnabled(false)
                 .start(this);
     }

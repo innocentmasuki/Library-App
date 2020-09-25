@@ -87,7 +87,7 @@ Bitmap bitmap;
 
 
 
-//
+
 //    String validate_url = "http://192.168.43.225/library/validate.php";
 //    String Surl = "http://192.168.43.225/library/image_upload.php";
 //    String Sendurl = "http://192.168.43.225/library/register.php";

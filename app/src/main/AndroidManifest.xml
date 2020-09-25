@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddBooks"></activity>
+        <activity android:name=".BookDetails"></activity>
+        <activity android:name=".AddBooks" />
         <activity android:name=".EditAccount" />
         <activity android:name=".librarian_account" />
         <activity android:name=".LogIn" />

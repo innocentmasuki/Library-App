@@ -25,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
@@ -41,13 +42,20 @@ import java.util.ArrayList;
 public class AppHome extends AppCompatActivity {
 
     ImageView userAcount;
-    String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
-//    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
 
 
     String bookInfoUrl = "http://192.168.137.1/library/get_books.php";
-    Context context;
-    ArrayList<Books> arrayList = new ArrayList<>();
+        String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
+
+
+//
+//    String bookInfoUrl = "http://192.168.43.225/library/get_books.php";
+//    String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
+//
+
+    private RecyclerView recentsRecyclerView;
+    private  BooksAdapter recentBooksAdapter;
+    private ArrayList<Books> recentBookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +64,12 @@ public class AppHome extends AppCompatActivity {
 
          final String logged =  getIntent().getStringExtra("Mail");
          final String fullname =  getIntent().getStringExtra("fullname");
+         recentsRecyclerView = findViewById(R.id.recentRecyclerView);
+         recentsRecyclerView.setHasFixedSize(true);
+         recentsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
 
+         recentBookList = new ArrayList<>();
+         parseJSON();
 
         userAcount = findViewById(R.id.userAccount);
 
@@ -137,6 +150,43 @@ public class AppHome extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void parseJSON() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, bookInfoUrl, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for(int i = 0; i < response.length(); i++){
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String Title = jsonObject.getString("Title");
+                                String Cover = jsonObject.getString("Cover");
+                                String Author = jsonObject.getString("Author");
+                                recentBookList.add(new Books(Title, Author,Cover));
+
+                                recentBooksAdapter = new BooksAdapter(AppHome.this, recentBookList);
+                                recentsRecyclerView.setAdapter(recentBooksAdapter);
+
+                            }
+                        }
+                        catch (JSONException  e) {
+                                e.printStackTrace();
+                            }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(AppHome.this);
+        requestQueue.add(jsonArrayRequest);
+
+
+
     }
 
     @Override
