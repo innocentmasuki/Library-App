@@ -13,9 +13,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -45,20 +49,22 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class AddBooks extends AppCompatActivity {
+public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-//    String add_info_url = "http://192.168.137.1/library/book_info_upload.php";
+//      String add_info_url = "http://192.168.137.1/library/book_info_upload.php";
 //    String add_cover_url = "http://192.168.137.1/library/add_book.php";
 //    String validate_url = "http://192.168.137.1/library/validate_book.php";
 
-    String add_info_url = "http://192.168.43.225/library/book_info_upload.php";
+      String add_info_url = "http://192.168.43.225/library/book_info_upload.php";
     String add_cover_url = "http://192.168.43.225/library/add_book.php";
     String validate_url = "http://192.168.43.225/library/validate_book.php";
+    String categorySelected;
     Uri uri;
     Bitmap bitmap;
     Button addbookBtn;
-    EditText Title, Author, Isbn, Category, Description;
+    EditText Title, Author, Isbn, Description,remaining;
     ImageView bookCover, bookcover2;
+    Spinner categorySpinner;
     boolean check = true;
 
     @Override
@@ -66,12 +72,18 @@ public class AddBooks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_books);
         Title = findViewById(R.id.bookTitle);
+        remaining = findViewById(R.id.present);
         Author = findViewById(R.id.bookAuthor);
         Isbn = findViewById(R.id.isbn);
         Description = findViewById(R.id.description);
         bookCover = findViewById(R.id.bookCover);
         bookcover2 = findViewById(R.id.book_cover2);
         addbookBtn = findViewById(R.id.addbookBtn);
+        categorySpinner = findViewById(R.id.categorySpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.bookCategory, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+        categorySpinner.setOnItemSelectedListener(this);
 
 
 
@@ -96,11 +108,12 @@ public class AddBooks extends AppCompatActivity {
 
 
     public  void validate(){
-        final String title, author, isbn, description;
+        final String title, author, isbn, description, Available;
         title = Title.getText().toString();
         author = Author.getText().toString();
         isbn = Isbn.getText().toString();
         description = Description.getText().toString();
+        Available = remaining.getText().toString();
         final String logged =  getIntent().getStringExtra("Mail");
 
 
@@ -112,8 +125,10 @@ public class AddBooks extends AppCompatActivity {
                             if(response.equals("This book already Exists")){
                                 Toast.makeText(AddBooks.this, response, Toast.LENGTH_SHORT).show();
                             }else if(response.equals("dont Exist")){
+                                Toast.makeText(AddBooks.this, "Choose Book Cover", Toast.LENGTH_SHORT).show();
+
                                 if(!(bookCover.getDrawable() == bookcover2.getDrawable())){
-                                    sendData(title, author, isbn, description, logged);
+                                    sendData(title, author, isbn, description, logged, categorySelected,Available);
                                     ImageUploadToServerFunction();
                                 }else {
                                     Toast.makeText(AddBooks.this, "Choose Book Cover", Toast.LENGTH_SHORT).show();
@@ -142,10 +157,7 @@ public class AddBooks extends AppCompatActivity {
         }
     }
 
-
-
-    public void sendData(final String title, final String author, final String isbn, final String description, final String logged ){
-
+    public void sendData(final String title, final String author, final String isbn, final String description, final String logged , final String categorySelected, final String Available){
             StringRequest signUprequest = new StringRequest(Request.Method.POST, add_info_url,
                     new Response.Listener<String>() {
                         @Override
@@ -156,6 +168,7 @@ public class AddBooks extends AppCompatActivity {
                                 Isbn.setText("");
                                 Description.setText("");
                                 Title.setText("");
+                                remaining.setText("");
                             }
 
 
@@ -175,6 +188,8 @@ public class AddBooks extends AppCompatActivity {
                     params.put("isbn",isbn);
                     params.put("descriptions",description);
                     params.put("uploadedby",logged);
+                    params.put("available",Available);
+                    params.put("category",categorySelected);
                     return params;
                 }
             };
@@ -231,6 +246,16 @@ public class AddBooks extends AppCompatActivity {
                 .setAspectRatio(11, 16)
                 .setMultiTouchEnabled(false)
                 .start(this);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        categorySelected = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     public class ImageProcessClass{
@@ -331,7 +356,7 @@ public class AddBooks extends AppCompatActivity {
 
         byteArrayOutputStreamObject = new ByteArrayOutputStream();
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArrayOutputStreamObject);
 
         byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
 

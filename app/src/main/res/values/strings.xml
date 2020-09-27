@@ -28,4 +28,23 @@
     <string name="borrowed">Borrowed</string>
     <string name="borrow">Borrow</string>
     <string name="request">Request</string>
+    <string name="available_books">Available Books</string>
+
+    <string-array name="bookCategory">
+        <item>Programming</item>
+        <item>Electronics</item>
+        <item>Novel</item>
+        <item>Mechanics</item>
+        <item>Photography</item>
+        <item>Animation</item>
+        <item>Language</item>
+        <item>Mathematics</item>
+        <item>Finance</item>
+        <item>Religion</item>
+        <item>Communication</item>
+        <item>Music</item>
+        <item>Art</item>
+        <item>Film</item>
+        <item>Architecture</item>
+    </string-array>
 </resources>

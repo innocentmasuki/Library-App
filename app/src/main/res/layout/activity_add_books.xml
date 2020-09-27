@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,6 +7,12 @@
     android:layout_height="match_parent"
     android:gravity="center"
     tools:context=".AddBooks">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
 
 <TextView
@@ -16,6 +22,7 @@
     android:textSize="24sp"
     android:layout_gravity="top"
     android:textStyle="bold"
+    android:layout_marginTop="30dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:textColor="@color/black"/>
@@ -87,6 +94,33 @@
         android:autofillHints="@string/isbn"
         android:inputType="number" />
 
+        <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/available_books"
+        android:id="@+id/present"
+        android:textStyle="normal"
+        android:layout_marginHorizontal="20dp"
+        android:textAlignment="textStart"
+        android:paddingLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:paddingRight="20dp"
+        android:gravity="start"
+        android:paddingStart="20dp"
+        android:autofillHints="@string/isbn"
+        android:inputType="number" />
+
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:paddingStart="15dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/categorySpinner"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,8 +128,8 @@
         android:id="@+id/description"
         android:textStyle="normal"
         android:minLines="5"
-        android:lines="5"
-        android:maxLines="20"
+        android:lines="10"
+        android:maxLines="30"
         android:textAllCaps="true"
         android:layout_marginHorizontal="20dp"
         android:textAlignment="textStart"
@@ -120,3 +154,4 @@
 
 
 </LinearLayout>
+</ScrollView>

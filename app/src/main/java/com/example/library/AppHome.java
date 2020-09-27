@@ -6,26 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
@@ -34,9 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemClickListener {
@@ -58,12 +47,14 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
 
 
     String bookInfoUrl = "http://192.168.43.225/library/get_books.php";
+    String get_popular_booksUrl = "http://192.168.43.225/library/get_popular_books.php";
+    String get_programming_booksUrl = "http://192.168.43.225/library/get_programing_books.php";
+    String get_novel_booksUrl = "http://192.168.43.225/library/get_novel_books.php";
     String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
 
 
-    private RecyclerView recentsRecyclerView;
     private  BooksAdapter recentBooksAdapter;
-    private ArrayList<Books> recentBookList;
+    private ArrayList<Books> recentBookList, popularBookList, programmingBookList, novelBookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +63,31 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
 
          final String logged =  getIntent().getStringExtra("Mail");
          final String fullname =  getIntent().getStringExtra("fullname");
-         recentsRecyclerView = findViewById(R.id.recentRecyclerView);
-         recentsRecyclerView.setHasFixedSize(true);
-         recentsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
+
+        RecyclerView recentRecyclerView = findViewById(R.id.recentRecyclerView);
+        RecyclerView popularRecyclerView = findViewById(R.id.popularRecyclerView);
+        RecyclerView programmingRecyclerView = findViewById(R.id.programmingRecyclerView);
+        RecyclerView novelRecyclerView = findViewById(R.id.novelRecyclerView);
+
+         recentRecyclerView.setHasFixedSize(true);
+        popularRecyclerView.setHasFixedSize(true);
+        programmingRecyclerView.setHasFixedSize(true);
+        novelRecyclerView.setHasFixedSize(true);
+
+         recentRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
+        popularRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
+        programmingRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
+        novelRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
 
          recentBookList = new ArrayList<>();
-         parseJSON();
+        popularBookList = new ArrayList<>();
+        programmingBookList = new ArrayList<>();
+        novelBookList = new ArrayList<>();
+
+         parseJSON(bookInfoUrl,recentRecyclerView, recentBookList);
+         parseJSON(get_programming_booksUrl,programmingRecyclerView, programmingBookList);
+         parseJSON(get_novel_booksUrl,novelRecyclerView, novelBookList);
+         parseJSON(get_popular_booksUrl,popularRecyclerView, popularBookList);
 
         userAcount = findViewById(R.id.userAccount);
 
@@ -161,8 +171,8 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
         });
     }
 
-    private void parseJSON() {
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, bookInfoUrl, null,
+    private void parseJSON(String url, final RecyclerView recyclerView, final ArrayList<Books> bookList) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -177,10 +187,9 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
                                 String category = jsonObject.getString("Category");
                                 String descripts = jsonObject.getString("Description");
                                 String uploadedby  = jsonObject.getString("Uploadedby");
-                                recentBookList.add(new Books(Title, Author,Cover, isbn, category, uploadedby, remaining, descripts));
-
-                                recentBooksAdapter = new BooksAdapter(AppHome.this, recentBookList);
-                                recentsRecyclerView.setAdapter(recentBooksAdapter);
+                                bookList.add(new Books(Title, Author,Cover, isbn, category, uploadedby, remaining, descripts));
+                                recentBooksAdapter = new BooksAdapter(AppHome.this, bookList);
+                                recyclerView.setAdapter(recentBooksAdapter);
                                 recentBooksAdapter.setOnItemClickListener(AppHome.this);
                             }
                         }
@@ -198,6 +207,7 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(AppHome.this);
         requestQueue.add(jsonArrayRequest);
+
     }
 
     @Override
@@ -269,9 +279,20 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
 
     @Override
     public void onItemClick(int position) {
+        Books recentBook, popularBook, novelBook, programmingBook;
+         recentBook = recentBookList.get(position);
+         popularBook = popularBookList.get(position);
+        programmingBook = programmingBookList.get(position);
+        novelBook = novelBookList.get(position);
+        clickedBook(recentBook);
+        clickedBook(popularBook);
+        clickedBook(programmingBook);
+        clickedBook(novelBook);
+    }
+
+    public void clickedBook(@NonNull Books clickedItem){
         final String logged =  getIntent().getStringExtra("Mail");
         Intent intent = new Intent(this, BookDetails.class);
-        Books clickedItem = recentBookList.get(position);
         intent.putExtra(COVER_URL, clickedItem.getCover());
         intent.putExtra(TITLE, clickedItem.getTitle());
         intent.putExtra("Mail",logged);

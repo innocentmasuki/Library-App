@@ -89,6 +89,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
                     if (mListener != null){
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
+
                             mListener.onItemClick(position);
                         }
                     }

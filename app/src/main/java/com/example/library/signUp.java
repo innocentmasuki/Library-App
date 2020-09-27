@@ -401,7 +401,7 @@ Bitmap bitmap;
 
         byteArrayOutputStreamObject = new ByteArrayOutputStream();
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArrayOutputStreamObject);
 
         byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
 
