@@ -46,7 +46,7 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
 //        String getUserInfo_url = "http://192.168.137.1/library/retrieve_user_info.php";
 
 
-
+//these are the URLs for the APIs
     String bookInfoUrl = "http://192.168.43.225/library/get_books.php";
     String get_popular_booksUrl = "http://192.168.43.225/library/get_popular_books.php";
     String get_programming_booksUrl = "http://192.168.43.225/library/get_programing_books.php";
@@ -64,6 +64,8 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
 
          final String fullname =  getIntent().getStringExtra("fullname");
 
+
+//these are recycler views
         RecyclerView recentRecyclerView = findViewById(R.id.recentRecyclerView);
         RecyclerView popularRecyclerView = findViewById(R.id.popularRecyclerView);
         RecyclerView programmingRecyclerView = findViewById(R.id.programmingRecyclerView);
@@ -79,21 +81,24 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
         programmingRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
         novelRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
 
+
+        //these are the array lists
         recentBookList = new ArrayList<>();
         popularBookList = new ArrayList<>();
         programmingBookList = new ArrayList<>();
         novelBookList = new ArrayList<>();
 
+
+        //I called the function parseJSON I created below
          parseJSON(bookInfoUrl,recentRecyclerView, recentBookList);
          parseJSON(get_programming_booksUrl,programmingRecyclerView, programmingBookList);
          parseJSON(get_electronics_booksUrl,novelRecyclerView, novelBookList);
          parseJSON(get_popular_booksUrl,popularRecyclerView, popularBookList);
 
+
+         //here i was creating the user accout section
         userAcount = findViewById(R.id.userAccount);
-
-
         getUserImage();
-
         userAcount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +111,7 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
             }
         });
 
+        //these are for the bottom navigation
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         //Set Home Selected
@@ -285,6 +291,10 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
         alertDialog.show();
     }
 
+
+
+
+    //this onItemClick() is handling the events
     @Override
     public void onItemClick(int position) {
         Books recentBook, popularBook, novelBook, programmingBook;
@@ -298,6 +308,8 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
 
     }
 
+
+    //I created the clickedBook() to make all lists functioning but it didnt work
     public void clickedBook(@NonNull Books clickedItem){
         final String logged =  getIntent().getStringExtra("Mail");
         Intent intent = new Intent(this, BookDetails.class);
