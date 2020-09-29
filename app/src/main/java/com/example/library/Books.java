@@ -1,9 +1,9 @@
 package com.example.library;
 
 public class Books {
-    String title, author, cover, isbn, Category, uploadedBy, available, descript;
+    String title, author, cover, isbn, Category, uploadedBy, available, descript ,requests;
 
-    public Books(String title, String author, String cover, String isbn, String Category, String uploadedBy, String available, String descript) {
+    public Books(String title, String author, String cover, String isbn, String Category, String uploadedBy, String available, String descript, String requests) {
         this.setTitle(title);
         this.setAuthor(author);
         this.setCover(cover);
@@ -12,7 +12,17 @@ public class Books {
         this.setUploadedBy(uploadedBy);
         this.setAvailable(available);
         this.setDescript(descript);
+        this.setRequests(requests);
 
+
+    }
+
+    public String getRequests() {
+        return requests;
+    }
+
+    public void setRequests(String requests) {
+        this.requests = requests;
     }
 
     public String getDescript() {

@@ -53,6 +53,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
         String uploadedby = currentBook.getUploadedBy();
         String available = currentBook.getAvailable();
         String description = currentBook.getDescript();
+        String requested = currentBook.getRequests();
 
         holder.bookTitle.setText(title);
         holder.bookAuthor.setText(author);
@@ -61,6 +62,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
         holder.bookCategory.setText(category);
         holder.uploader.setText(uploadedby);
         holder.available.setText(available);
+        holder.Requests.setText(requested);
         Picasso.get().load(cover).fit().centerInside().into(holder.bookCover);
     }
 
@@ -71,7 +73,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
 
     public class BooksViewHolder extends RecyclerView.ViewHolder {
         public ImageView bookCover;
-        public TextView bookTitle, bookAuthor, bookDescriptions, available, isbn, uploader, bookCategory;
+        public TextView bookTitle, bookAuthor, bookDescriptions, available, isbn, uploader, bookCategory, Requests;
         public BooksViewHolder(@NonNull View itemView) {
             super(itemView);
             bookAuthor = itemView.findViewById(R.id.author);
@@ -82,6 +84,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
             isbn = itemView.findViewById(R.id.isbn);
             uploader = itemView.findViewById(R.id.uploadby);
             bookCategory = itemView.findViewById(R.id.category);
+            Requests = itemView.findViewById(R.id.requs);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,6 +94,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
                         if (position != RecyclerView.NO_POSITION){
 
                             mListener.onItemClick(position);
+
                         }
                     }
                 }
