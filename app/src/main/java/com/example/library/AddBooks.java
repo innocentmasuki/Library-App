@@ -125,7 +125,7 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
                             if(response.equals("This book already Exists")){
                                 Toast.makeText(AddBooks.this, response, Toast.LENGTH_SHORT).show();
                             }else if(response.equals("dont Exist")){
-                                Toast.makeText(AddBooks.this, "Choose Book Cover", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(AddBooks.this, "Choose Book Cover", Toast.LENGTH_SHORT).show();
 
                                 if(!(bookCover.getDrawable() == bookcover2.getDrawable())){
                                     sendData(title, author, isbn, description, logged, categorySelected,Available);

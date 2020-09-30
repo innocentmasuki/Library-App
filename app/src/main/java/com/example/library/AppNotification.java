@@ -24,10 +24,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AppNotification extends AppCompatActivity implements NotificationAdapter.OnItemClickListener{
+public class AppNotification extends AppCompatActivity{
+
+    String get_Admin_alert = "http://192.168.43.225/library/get_notification_admin.php";
 
     private NotificationAdapter notificationAdapter;
     private ArrayList<Notification> notificationList;
+    RecyclerView notificationRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +39,15 @@ public class AppNotification extends AppCompatActivity implements NotificationAd
         final String logged =  getIntent().getStringExtra("Mail");
 
 
-        RecyclerView notificationRecycler = findViewById(R.id.nRecyclerView);
+        notificationRecycler = findViewById(R.id.nRecyclerView);
         notificationRecycler.setHasFixedSize(true);
-        notificationRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false ));
+        notificationRecycler.setLayoutManager(new LinearLayoutManager(this));
+
 
         notificationList = new ArrayList<>();
 
 
-
+    parseJSON(get_Admin_alert,notificationRecycler, notificationList );
 
 
 
@@ -100,7 +104,7 @@ public class AppNotification extends AppCompatActivity implements NotificationAd
         finish();
     }
 
-    private void parseJSON(String url, final RecyclerView recyclerView, final ArrayList<Books> bookList) {
+    private void parseJSON(String url, final RecyclerView recyclerView, final ArrayList<Notification> bookList) {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -113,10 +117,10 @@ public class AppNotification extends AppCompatActivity implements NotificationAd
                                 String Author = jsonObject.getString("Author");
                                 String requestedBy = jsonObject.getString("RequestedBy");
 
-                                notificationList.add(new Notification(Cover, Title,Author, requestedBy));
-                                notificationAdapter = new NotificationAdapter(AppNotification.this, notificationList);
+                                bookList.add(new Notification(Cover, Title,Author, requestedBy));
+                                notificationAdapter = new NotificationAdapter(AppNotification.this, bookList);
                                 recyclerView.setAdapter(notificationAdapter);
-                                notificationAdapter.setOnItemClickListener(AppNotification.this);
+//                                notificationAdapter.setOnItemClickListener(AppNotification.this);
                             }
                         }
                         catch (JSONException e) {
@@ -136,18 +140,18 @@ public class AppNotification extends AppCompatActivity implements NotificationAd
 
     }
 
-    @Override
-    public void onItemClick(int position) {
-        Notification notification;
-        notification = notificationList.get(position);
+//    @Override
+//    public void onItemClick(int position) {
+//        Notification notification;
+//        notification = notificationList.get(position);
+//
+//        clickedBook(notification);
+//
+//    }
 
-        clickedBook(notification);
 
-    }
-
-
-    public void clickedBook(@NonNull Notification clickedItem){
-        final String logged =  getIntent().getStringExtra("Mail");
-        Toast.makeText(this, "Item Clicked", Toast.LENGTH_SHORT).show();
-    }
+//    public void clickedBook(@NonNull Notification clickedItem){
+//        final String logged =  getIntent().getStringExtra("Mail");
+//        Toast.makeText(this, "Item Clicked", Toast.LENGTH_SHORT).show();
+//    }
 }

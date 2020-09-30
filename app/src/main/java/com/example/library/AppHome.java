@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,12 +29,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemClickListener {
-
+public class AppHome extends AppCompatActivity {
     ImageView userAcount;
+    Books recentBook, popularBook, novelBook, programmingBook;
         public  static final String COVER_URL = "coverUrl";
         public  static final String TITLE = "title";
         public  static final String AUTHOR = "author";
+//        public  static final String LOGGED = "logged";
         public  static final String ISBN = "isbn";
         public  static final String UPLOADED_BY = "uploadedBy";
         public  static final String AVAILABLE = "available";
@@ -56,6 +58,7 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
 
     private BooksAdapter myBooksAdapter;
     private ArrayList<Books> recentBookList, popularBookList, programmingBookList, novelBookList;
+    private Object Books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,10 +188,12 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
     }
 
     private void parseJSON(String url, final RecyclerView recyclerView, final ArrayList<Books> bookList) {
+        final String logged =  getIntent().getStringExtra("Mail");
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        bookList.clear();
                         try {
                             for(int i = 0; i < response.length(); i++){
                                 JSONObject jsonObject = response.getJSONObject(i);
@@ -202,9 +207,10 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
                                 String uploadedby  = jsonObject.getString("Uploadedby");
                                 String requests  = jsonObject.getString("Requests");
                                 bookList.add(new Books(Title, Author,Cover, isbn, category, uploadedby, remaining, descripts, requests));
-                                myBooksAdapter = new BooksAdapter(AppHome.this, bookList);
+                                myBooksAdapter = new BooksAdapter(AppHome.this, bookList, logged);
                                 recyclerView.setAdapter(myBooksAdapter);
-                                myBooksAdapter.setOnItemClickListener(AppHome.this);
+                                myBooksAdapter.notifyDataSetChanged();
+//                                myBooksAdapter.setOnItemClickListener(AppHome.this);
                             }
                         }
                         catch (JSONException  e) {
@@ -261,6 +267,7 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
                                 // When the user click yes button
                                 // then app will close
                                 finish();
+
                             }
                         });
 
@@ -291,41 +298,6 @@ public class AppHome extends AppCompatActivity implements BooksAdapter.OnItemCli
         alertDialog.show();
     }
 
-
-
-
-    //this onItemClick() is handling the events
-    @Override
-    public void onItemClick(int position) {
-        Books recentBook, popularBook, novelBook, programmingBook;
-         recentBook = recentBookList.get(position);
-//         popularBook = popularBookList.get(position);
-//        programmingBook = programmingBookList.get(position);
-//        novelBook = novelBookList.get(position);
-//        Books[] myBooks = { recentBook, popularBook, novelBook,
-//                programmingBook};
-        clickedBook(recentBook);
-
-    }
-
-
-    //I created the clickedBook() to make all lists functioning but it didnt work
-    public void clickedBook(@NonNull Books clickedItem){
-        final String logged =  getIntent().getStringExtra("Mail");
-        Intent intent = new Intent(this, BookDetails.class);
-        intent.putExtra(COVER_URL, clickedItem.getCover());
-        intent.putExtra(TITLE, clickedItem.getTitle());
-        intent.putExtra("Mail",logged);
-        intent.putExtra(AUTHOR, clickedItem.getAuthor());
-        intent.putExtra(ISBN, clickedItem.getIsbn());
-        intent.putExtra(UPLOADED_BY, clickedItem.getUploadedBy());
-        intent.putExtra(AVAILABLE, clickedItem.getAvailable());
-        intent.putExtra(CATEGORY, clickedItem.getCategory());
-        intent.putExtra(DESCRIPTIONS, clickedItem.getDescript());
-        intent.putExtra(REQUESTS, clickedItem.getRequests());
-        startActivity(intent);
-        finish();
-    }
 }
 
 

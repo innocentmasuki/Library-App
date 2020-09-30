@@ -1,5 +1,6 @@
 package com.example.library;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -41,6 +42,9 @@ public class BookDetails extends AppCompatActivity {
 ImageView background_image, bookCover;
 ToggleButton borrowBtn;
 TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailable, descriptions,requests;
+
+    String validate_url = "http://192.168.43.225/library/validate_request.php";
+    String Sendurl = "http://192.168.43.225/library/add_notification.php";
 
     String addRequestUrl = "http://192.168.43.225/library/addRequest.php";
     @Override
@@ -84,18 +88,15 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         requests.setText(reqs);
 
 
-        assert reqs != null;
+
+
 
         borrowBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(borrowBtn.isChecked()){
-
-                    int request = Integer.parseInt(reqs);
-                        borrowBtn.setTextOn("Requested");
-                        int r = request + 1;
-                        String R = Integer.toString(r);
-                        addRequest(R);
+                    borrowBtn.setTextOn("Request");
+                        validate();
 //                    Toast.makeText(BookDetails.this, R, Toast.LENGTH_SHORT).show();
                 }else{
                     borrowBtn.setTextOff("Request");
@@ -121,6 +122,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                 error.printStackTrace();
             }
         }){
+            @NonNull
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Intent intent = getIntent();
@@ -134,6 +136,89 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         RequestQueue requestQueue = Volley.newRequestQueue(BookDetails.this);
         requestQueue.add(validate);
     }
+
+    public  void validate(){
+            StringRequest validate = new StringRequest(Request.Method.POST, validate_url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.equals("Can't create request")){
+                                Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
+                            }else if(response.equals("dont Exist")){
+                                Intent intent = getIntent();
+                                final String reqs = intent.getStringExtra(REQUESTS);
+                                assert reqs != null;
+                                int request = Integer.parseInt(reqs);
+                                int r = request + 1;
+                                String R = Integer.toString(r);
+                                addRequest(R);
+                                sendData();
+
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    Intent intent = getIntent();
+                    String logged = intent.getStringExtra("Mail");
+                    params.put("email",logged);
+                    params.put("title",bookTitle.getText().toString());
+                    return params;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(BookDetails.this);
+            requestQueue.add(validate);
+
+        }
+
+
+    public void sendData(){
+
+            StringRequest signUprequest = new StringRequest(Request.Method.POST, Sendurl,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.equals("notificationAdded")){
+                                borrowBtn.setTextOn("Request");
+                                Toast.makeText(BookDetails.this, "requested", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(BookDetails.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    error.printStackTrace();
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    Intent intent = getIntent();
+                    String coverUrl = intent.getStringExtra(COVER_URL);
+                    String title = intent.getStringExtra(TITLE);
+                    String author = intent.getStringExtra(AUTHOR);
+                    String logged = intent.getStringExtra("Mail");
+                    String views = "Admin";
+                    params.put("cover", coverUrl);
+                    params.put("title", title);
+                    params.put("author", author);
+                    params.put("requestedby", logged);
+                    params.put("views", views);
+                    return params;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(BookDetails.this);
+            requestQueue.add(signUprequest);
+        }
+
+
 
     public void onBackPressed(){
         final String logged =  getIntent().getStringExtra("Mail");

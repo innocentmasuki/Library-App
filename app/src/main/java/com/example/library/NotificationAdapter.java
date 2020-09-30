@@ -16,27 +16,27 @@ import java.util.ArrayList;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.notificationViewHolder> {
 
-    private Context mcontext;
+    private Context mycontext;
     private ArrayList<Notification> marrayList;
-    private NotificationAdapter.OnItemClickListener mListener;
+//    private NotificationAdapter.OnItemClickListener mListener;
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-    public void setOnItemClickListener(NotificationAdapter.OnItemClickListener listener){
-        mListener = listener;
-    }
+//    public interface OnItemClickListener {
+//        void onItemClick(int position);
+//    }
+//    public void setOnItemClickListener(NotificationAdapter.OnItemClickListener listener){
+//        mListener = listener;
+//    }
 
     public NotificationAdapter(Context context, ArrayList<Notification> arrayList){
         marrayList = arrayList;
-        mcontext = context;
+        mycontext = context;
 
     }
 
     @NonNull
     @Override
     public NotificationAdapter.notificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mcontext).inflate(R.layout.notification_row, parent, false);
+        View view = LayoutInflater.from(mycontext).inflate(R.layout.notification_row, parent, false);
         return new notificationViewHolder(view);
     }
 
@@ -68,25 +68,24 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public TextView bookTitle, bookAuthor, requestedBy;
         public notificationViewHolder(@NonNull View itemView) {
             super(itemView);
-            bookAuthor = itemView.findViewById(R.id.author);
-            bookCover = itemView.findViewById(R.id.bCover);
-            bookTitle = itemView.findViewById(R.id.title);
-            requestedBy = itemView.findViewById(R.id.descripts);
+            bookAuthor = itemView.findViewById(R.id.rbookAuthor);
+            bookCover = itemView.findViewById(R.id.rbookCover);
+            bookTitle = itemView.findViewById(R.id.rbookTitle);
+            requestedBy = itemView.findViewById(R.id.requestedBy);
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-
-                            mListener.onItemClick(position);
-
-                        }
-                    }
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mListener != null){
+//                        int position = getAdapterPosition();
+//                        if (position != RecyclerView.NO_POSITION){
+//                            mListener.onItemClick(position);
+//
+//                        }
+//                    }
+//                }
+//            });
         }
     }
 }
