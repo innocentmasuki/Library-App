@@ -13,8 +13,6 @@ public class Books {
         this.setAvailable(available);
         this.setDescript(descript);
         this.setRequests(requests);
-
-
     }
 
     public String getRequests() {

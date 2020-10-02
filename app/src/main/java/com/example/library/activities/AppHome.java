@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +21,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.library.Books;
+import com.example.library.R;
+import com.example.library.adapters.BooksAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +35,7 @@ import java.util.ArrayList;
 
 public class AppHome extends AppCompatActivity {
     ImageView userAcount;
-    Books recentBook, popularBook, novelBook, programmingBook;
+    com.example.library.Books recentBook, popularBook, novelBook, programmingBook;
         public  static final String COVER_URL = "coverUrl";
         public  static final String TITLE = "title";
         public  static final String AUTHOR = "author";
@@ -57,7 +61,6 @@ public class AppHome extends AppCompatActivity {
 
 
     private BooksAdapter myBooksAdapter;
-    private ArrayList<Books> recentBookList, popularBookList, programmingBookList, novelBookList;
     private Object Books;
 
     @Override
@@ -66,6 +69,10 @@ public class AppHome extends AppCompatActivity {
         setContentView(R.layout.activity_app_home);
 
          final String fullname =  getIntent().getStringExtra("fullname");
+         final String role =  getIntent().getStringExtra("ROLE");
+         final String logged =  getIntent().getStringExtra("Mail");
+
+
 
 
 //these are recycler views
@@ -86,10 +93,10 @@ public class AppHome extends AppCompatActivity {
 
 
         //these are the array lists
-        recentBookList = new ArrayList<>();
-        popularBookList = new ArrayList<>();
-        programmingBookList = new ArrayList<>();
-        novelBookList = new ArrayList<>();
+        ArrayList<com.example.library.Books> recentBookList = new ArrayList<>();
+        ArrayList<com.example.library.Books> popularBookList = new ArrayList<>();
+        ArrayList<com.example.library.Books> programmingBookList = new ArrayList<>();
+        ArrayList<com.example.library.Books> novelBookList = new ArrayList<>();
 
 
         //I called the function parseJSON I created below
@@ -108,6 +115,7 @@ public class AppHome extends AppCompatActivity {
                 final String logged =  getIntent().getStringExtra("Mail");
                 Intent intent = new Intent(AppHome.this, librarian_account.class);
                 intent.putExtra("Mail",logged);
+                intent.putExtra("ROLE",role);
                 intent.putExtra("fullname",fullname);
                 startActivity(intent);
                 finish();
@@ -117,6 +125,20 @@ public class AppHome extends AppCompatActivity {
         //these are for the bottom navigation
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+
+
+        assert role != null;
+        if(role.equals("Admin")){
+            bottomNavigationView.setVisibility(View.GONE);
+
+        }else if(role.equals("user")){
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            bottomNavigationView.getMenu().findItem(R.id.favBooks).setVisible(false);
+
+        }
+
+
         //Set Home Selected
         bottomNavigationView.setSelectedItemId(R.id.appHome);
         //perform itemSelectListener
@@ -124,11 +146,15 @@ public class AppHome extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 final String logged =  getIntent().getStringExtra("Mail");
+                String role =  getIntent().getStringExtra("ROLE");
+
+
 
                 switch (menuItem.getItemId()){
                     case R.id.appSearch:
                         Intent search = new Intent(getApplicationContext(), AppSearch.class);
                         search.putExtra("Mail",logged);
+                        search.putExtra("ROLE",role);
                         startActivity(search);
                         overridePendingTransition(1,1);
                         finish();
@@ -136,6 +162,7 @@ public class AppHome extends AppCompatActivity {
                     case R.id.favBooks:
                         Intent fav = new Intent(getApplicationContext(), FavBooks.class);
                         fav.putExtra("Mail",logged);
+                        fav.putExtra("ROLE",role);
                         startActivity(fav);
                         overridePendingTransition(1,1);
                         finish();
@@ -143,6 +170,7 @@ public class AppHome extends AppCompatActivity {
                     case R.id.appNotification:
                         Intent notification = new Intent(getApplicationContext(), AppNotification.class);
                         notification.putExtra("Mail",logged);
+                        notification.putExtra("ROLE",role);
                         startActivity(notification);
                         overridePendingTransition(1,1);
                         finish();
@@ -158,6 +186,8 @@ public class AppHome extends AppCompatActivity {
 
     private void getUserImage() {
         final String logged =  getIntent().getStringExtra("Mail");
+
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, getUserInfo_url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -189,6 +219,7 @@ public class AppHome extends AppCompatActivity {
 
     private void parseJSON(String url, final RecyclerView recyclerView, final ArrayList<Books> bookList) {
         final String logged =  getIntent().getStringExtra("Mail");
+        final String role =  getIntent().getStringExtra("ROLE");
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -207,10 +238,9 @@ public class AppHome extends AppCompatActivity {
                                 String uploadedby  = jsonObject.getString("Uploadedby");
                                 String requests  = jsonObject.getString("Requests");
                                 bookList.add(new Books(Title, Author,Cover, isbn, category, uploadedby, remaining, descripts, requests));
-                                myBooksAdapter = new BooksAdapter(AppHome.this, bookList, logged);
+                                myBooksAdapter = new BooksAdapter(AppHome.this, bookList, logged, role);
                                 recyclerView.setAdapter(myBooksAdapter);
                                 myBooksAdapter.notifyDataSetChanged();
-//                                myBooksAdapter.setOnItemClickListener(AppHome.this);
                             }
                         }
                         catch (JSONException  e) {
@@ -253,10 +283,7 @@ public class AppHome extends AppCompatActivity {
         // OnClickListener method is use of
         // DialogInterface interface.
 
-        builder
-                .setPositiveButton(
-                        "Yes",
-                        new DialogInterface
+        builder.setPositiveButton("Yes", new DialogInterface
                                 .OnClickListener() {
 
                             @Override
@@ -274,17 +301,13 @@ public class AppHome extends AppCompatActivity {
         // Set the Negative button with No name
         // OnClickListener method is use
         // of DialogInterface interface.
-        builder
-                .setNegativeButton(
-                        "No",
-                        new DialogInterface
+        builder.setNegativeButton("No", new DialogInterface
                                 .OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int which)
                             {
-
                                 // If user click no
                                 // then dialog box is canceled.
                                 dialog.cancel();
@@ -297,6 +320,10 @@ public class AppHome extends AppCompatActivity {
         // Show the Alert Dialog box
         alertDialog.show();
     }
+
+
+
+
 
 }
 

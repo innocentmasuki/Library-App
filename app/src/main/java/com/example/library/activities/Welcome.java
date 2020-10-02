@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.library.R;
 
 public class Welcome extends AppCompatActivity {
             public Button signUp;
@@ -26,7 +28,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     public void openSignUpActivity() {
-        Intent intent = new Intent(Welcome.this, signUp.class);
+        Intent intent = new Intent(Welcome.this, com.example.library.activities.signUp.class);
         startActivity(intent);
         finish();
     }

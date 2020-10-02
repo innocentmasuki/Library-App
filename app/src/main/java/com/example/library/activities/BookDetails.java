@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,32 +19,31 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.library.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.StatementEvent;
-
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
-import static com.example.library.AppHome.AUTHOR;
-import static com.example.library.AppHome.AVAILABLE;
-import static com.example.library.AppHome.CATEGORY;
-import static com.example.library.AppHome.COVER_URL;
-import static com.example.library.AppHome.DESCRIPTIONS;
-import static com.example.library.AppHome.ISBN;
-import static com.example.library.AppHome.REQUESTS;
-import static com.example.library.AppHome.TITLE;
-import static com.example.library.AppHome.UPLOADED_BY;
+import static com.example.library.activities.AppHome.AUTHOR;
+import static com.example.library.activities.AppHome.AVAILABLE;
+import static com.example.library.activities.AppHome.CATEGORY;
+import static com.example.library.activities.AppHome.COVER_URL;
+import static com.example.library.activities.AppHome.DESCRIPTIONS;
+import static com.example.library.activities.AppHome.ISBN;
+import static com.example.library.activities.AppHome.REQUESTS;
+import static com.example.library.activities.AppHome.TITLE;
+import static com.example.library.activities.AppHome.UPLOADED_BY;
 
 public class BookDetails extends AppCompatActivity {
 ImageView background_image, bookCover;
 ToggleButton borrowBtn;
-TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailable, descriptions,requests;
+TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailable, descriptions;
 
     String validate_url = "http://192.168.43.225/library/validate_request.php";
-    String Sendurl = "http://192.168.43.225/library/add_notification.php";
+    String addNotificationurl = "http://192.168.43.225/library/add_notification.php";
 
     String addRequestUrl = "http://192.168.43.225/library/addRequest.php";
     @Override
@@ -57,7 +56,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         String title = intent.getStringExtra(TITLE);
         String author = intent.getStringExtra(AUTHOR);
         String description = intent.getStringExtra(DESCRIPTIONS);
-        String remaining = intent.getStringExtra(AVAILABLE);
+        final String remaining = intent.getStringExtra(AVAILABLE);
         String category = intent.getStringExtra(CATEGORY);
         String isbn = intent.getStringExtra(ISBN);
         String uploader = intent.getStringExtra(UPLOADED_BY);
@@ -74,7 +73,6 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         booksAvailable = findViewById(R.id.availableBooks);
         uploadedBy = findViewById(R.id.uploadedBy);
         descriptions = findViewById(R.id.details);
-        requests = findViewById(R.id.request);
 
         Picasso.get().load(coverUrl).fit().into(bookCover);
         Picasso.get().load(coverUrl).fit().transform(new BlurTransformation(this, 50, 1)).into(background_image);
@@ -85,8 +83,15 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         booksAvailable.setText(remaining + " books Available");
         uploadedBy.setText("Uploaded by " + uploader);
         descriptions.setText(description);
-        requests.setText(reqs);
 
+
+        assert remaining != null;
+
+        if(Integer.parseInt(remaining) <= 0){
+            borrowBtn.setVisibility(View.GONE);
+        }else {
+            borrowBtn.setVisibility(View.VISIBLE);
+        }
 
 
 
@@ -97,7 +102,6 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                 if(borrowBtn.isChecked()){
                     borrowBtn.setTextOn("Request");
                         validate();
-//                    Toast.makeText(BookDetails.this, R, Toast.LENGTH_SHORT).show();
                 }else{
                     borrowBtn.setTextOff("Request");
                 }
@@ -105,37 +109,8 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         });
     }
 
-    private void addRequest(final String request) {
-        StringRequest validate = new StringRequest(Request.Method.POST, addRequestUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.equals("Error requesting")){
-                            Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
-                        }else if(response.equals("Requested")){
-                            Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @NonNull
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Intent intent = getIntent();
-                String isbn = intent.getStringExtra(ISBN);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("isbn",isbn);
-                params.put("requests",request);
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(BookDetails.this);
-        requestQueue.add(validate);
-    }
+
+
 
     public  void validate(){
             StringRequest validate = new StringRequest(Request.Method.POST, validate_url,
@@ -151,9 +126,9 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                                 int request = Integer.parseInt(reqs);
                                 int r = request + 1;
                                 String R = Integer.toString(r);
+
                                 addRequest(R);
                                 sendData();
-
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -177,16 +152,47 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
 
         }
 
+    private void addRequest(final String request) {
+        StringRequest validate = new StringRequest(Request.Method.POST, addRequestUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("Error requesting")){
+                            Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
+                        }else if(response.equals("Requested")){
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Intent intent = getIntent();
+                String isbn = intent.getStringExtra(ISBN);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("isbn",isbn);
+                params.put("requests",request);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(BookDetails.this);
+        requestQueue.add(validate);
+    }
 
     public void sendData(){
 
-            StringRequest signUprequest = new StringRequest(Request.Method.POST, Sendurl,
+            StringRequest addNotification = new StringRequest(Request.Method.POST, addNotificationurl,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             if(response.equals("notificationAdded")){
-                                borrowBtn.setTextOn("Request");
-                                Toast.makeText(BookDetails.this, "requested", Toast.LENGTH_LONG).show();
+                                borrowBtn.setTextOn("Requested");
+
+                                Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -204,6 +210,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                     String coverUrl = intent.getStringExtra(COVER_URL);
                     String title = intent.getStringExtra(TITLE);
                     String author = intent.getStringExtra(AUTHOR);
+                    String isbn = intent.getStringExtra(ISBN);
                     String logged = intent.getStringExtra("Mail");
                     String views = "Admin";
                     params.put("cover", coverUrl);
@@ -211,19 +218,24 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                     params.put("author", author);
                     params.put("requestedby", logged);
                     params.put("views", views);
+                    params.put("isbn",isbn);
+                    params.put("status","Requested");
+
                     return params;
                 }
             };
             RequestQueue requestQueue = Volley.newRequestQueue(BookDetails.this);
-            requestQueue.add(signUprequest);
+            requestQueue.add(addNotification);
         }
 
 
 
     public void onBackPressed(){
         final String logged =  getIntent().getStringExtra("Mail");
+        final String role =  getIntent().getStringExtra("ROLE");
         Intent intent = new Intent(BookDetails.this, AppHome.class);
         intent.putExtra("Mail",logged);
+        intent.putExtra("ROLE",role);
         startActivity(intent);
         finish();
     }

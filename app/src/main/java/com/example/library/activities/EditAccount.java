@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.library.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -246,8 +247,10 @@ public class EditAccount extends AppCompatActivity {
 
     public void onBackPressed(){
         final String logged =  getIntent().getStringExtra("Mail");
+        final String role =  getIntent().getStringExtra("ROLE");
         Intent intent = new Intent(EditAccount.this, librarian_account.class);
         intent.putExtra("Mail",logged);
+        intent.putExtra("ROLE",role);
         startActivity(intent);
         finish();
     }

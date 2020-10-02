@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,33 +12,37 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.library.activities.BookDetails;
+import com.example.library.Books;
+import com.example.library.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import static com.example.library.AppHome.AUTHOR;
-import static com.example.library.AppHome.AVAILABLE;
-import static com.example.library.AppHome.CATEGORY;
-import static com.example.library.AppHome.COVER_URL;
-import static com.example.library.AppHome.DESCRIPTIONS;
-import static com.example.library.AppHome.ISBN;
-//import static com.example.library.AppHome.LOGGED;
-import static com.example.library.AppHome.REQUESTS;
-import static com.example.library.AppHome.TITLE;
-import static com.example.library.AppHome.UPLOADED_BY;
+import static com.example.library.activities.AppHome.AUTHOR;
+import static com.example.library.activities.AppHome.AVAILABLE;
+import static com.example.library.activities.AppHome.CATEGORY;
+import static com.example.library.activities.AppHome.COVER_URL;
+import static com.example.library.activities.AppHome.DESCRIPTIONS;
+import static com.example.library.activities.AppHome.ISBN;
+//import static com.example.library.activities.AppHome.LOGGED;
+import static com.example.library.activities.AppHome.REQUESTS;
+import static com.example.library.activities.AppHome.TITLE;
+import static com.example.library.activities.AppHome.UPLOADED_BY;
 
 
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHolder> {
 
     private Context mcontext;
-    String mlogged;
+    String mlogged, mrole;
     private ArrayList<Books> marrayList;
 
 
-    public BooksAdapter(Context context, ArrayList<Books> arrayList, String logged){
+    public BooksAdapter(Context context, ArrayList<Books> arrayList, String logged, String role){
         marrayList = arrayList;
         mcontext = context;
         mlogged = logged;
+        mrole = role;
 
     }
 
@@ -86,6 +90,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
                 intent.putExtra(TITLE, title);
                 intent.putExtra(AUTHOR, author);
                 intent.putExtra("Mail",mlogged);
+                intent.putExtra("ROLE",mrole);
                 intent.putExtra(ISBN, isbn);
                 intent.putExtra(UPLOADED_BY, uploadedby);
                 intent.putExtra(AVAILABLE, available);

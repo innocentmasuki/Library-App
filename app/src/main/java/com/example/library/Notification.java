@@ -1,44 +1,73 @@
 package com.example.library;
 
 public class Notification {
-    String nBookCover, nBookTitle, nBookAuthor, nrequestedBy;
+    String nBookCover, nBookTitle, nBookAuthor, nrequestedBy, nId, nStatus, nIsbn;
 
-    public Notification(String nBookCover, String nBookTitle, String nBookAuthor, String nrequestedBy) {
-        this.nBookCover = nBookCover;
-        this.nBookTitle = nBookTitle;
-        this.nBookAuthor = nBookAuthor;
-        this.nrequestedBy = nrequestedBy;
+    public Notification(String bookCover, String bookTitle, String bookAuthor, String requestedBy, String id, String status, String isbn) {
+
+        this.setnBookAuthor(bookAuthor);
+        this.setnBookTitle(bookTitle);
+        this.setnBookCover(bookCover);
+        this.setNrequestedBy(requestedBy);
+        this.setnId(id);
+        this.setnStatus(status);
+        this.setnIsbn(isbn);
+    }
+
+
+    public String getnIsbn() {
+        return nIsbn;
+    }
+
+    public void setnIsbn(String isbn) {
+        this.nIsbn = isbn;
+    }
+
+    public String getnId() {
+        return nId;
+    }
+
+    public void setnId(String id) {
+        this.nId = id;
+    }
+
+    public String getnStatus() {
+        return nStatus;
+    }
+
+    public void setnStatus(String status) {
+        this.nStatus = status;
     }
 
     public String getnBookCover() {
         return nBookCover;
     }
 
-    public void setnBookCover(String nBookCover) {
-        this.nBookCover = nBookCover;
+    public void setnBookCover(String bookCover) {
+        this.nBookCover = bookCover;
     }
 
     public String getnBookTitle() {
         return nBookTitle;
     }
 
-    public void setnBookTitle(String nBookTitle) {
-        this.nBookTitle = nBookTitle;
+    public void setnBookTitle(String bookTitle) {
+        this.nBookTitle = bookTitle;
     }
 
     public String getnBookAuthor() {
         return nBookAuthor;
     }
 
-    public void setnBookAuthor(String nBookAuthor) {
-        this.nBookAuthor = nBookAuthor;
+    public void setnBookAuthor(String bookAuthor) {
+        this.nBookAuthor = bookAuthor;
     }
 
     public String getNrequestedBy() {
         return nrequestedBy;
     }
 
-    public void setNrequestedBy(String nrequestedBy) {
-        this.nrequestedBy = nrequestedBy;
+    public void setNrequestedBy(String requestedBy) {
+        this.nrequestedBy = requestedBy;
     }
 }

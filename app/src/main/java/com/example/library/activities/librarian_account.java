@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,15 +19,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.library.R;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class librarian_account extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -46,6 +44,7 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_librarian_account);
         final String logged =  getIntent().getStringExtra("Mail");
+        final String role =  getIntent().getStringExtra("ROLE");
 //        final String fullname = (String) getIntent().getStringExtra("fullname");
 
         imageView =  findViewById(R.id.images);
@@ -96,6 +95,13 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
 
         navigationView = findViewById(R.id.userAccountMenu);
 
+        assert role != null;
+        if(role.equals("user")){
+
+            navigationView.getMenu().findItem(R.id.addBooks).setVisible(false);
+
+        }
+
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
         }
@@ -106,12 +112,14 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         final String logged = (String) getIntent().getStringExtra("Mail");
+        final String role = (String) getIntent().getStringExtra("ROLE");
 
 
         int id = menuItem.getItemId();
         if (id == R.id.addBooks){
             Intent addbooks = new Intent(librarian_account.this, AddBooks.class);
             addbooks.putExtra("Mail",logged);
+            addbooks.putExtra("ROLE",role);
             startActivity(addbooks);
             finish();
         }else if(id == R.id.requests){
@@ -119,6 +127,7 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
         }else if(id == R.id.editProfile){
             Intent edit = new Intent(librarian_account.this, EditAccount.class);
             edit.putExtra("Mail",logged);
+            edit.putExtra("ROLE",role);
             startActivity(edit);
             finish();
         }else if(id == R.id.logOut){
@@ -187,10 +196,23 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
 
 
     public void onBackPressed(){
+        String role =  getIntent().getStringExtra("ROLE");
         final String logged =  getIntent().getStringExtra("Mail");
-        Intent intent = new Intent(librarian_account.this, AppHome.class);
-        intent.putExtra("Mail",logged);
-        startActivity(intent);
-        finish();
+
+        assert role != null;
+        if(role.equals("Admin")){
+            Intent intent = new Intent(librarian_account.this, AppNotification.class);
+            intent.putExtra("Mail",logged);
+            intent.putExtra("ROLE",role);
+            startActivity(intent);
+            finish();
+        }else if(role.equals("user")){
+            Intent intent = new Intent(librarian_account.this, AppHome.class);
+            intent.putExtra("Mail",logged);
+            intent.putExtra("ROLE",role);
+            startActivity(intent);
+            finish();
+        }
+
     }
 }

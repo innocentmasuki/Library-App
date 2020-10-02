@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.activities;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.library.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -41,7 +41,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -129,7 +128,10 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
 
                                 if(!(bookCover.getDrawable() == bookcover2.getDrawable())){
                                     sendData(title, author, isbn, description, logged, categorySelected,Available);
-                                    ImageUploadToServerFunction();
+                                        for(int i = 0; i < 5000;i++){
+
+                                        }
+
                                 }else {
                                     Toast.makeText(AddBooks.this, "Choose Book Cover", Toast.LENGTH_SHORT).show();
                                 }
@@ -152,6 +154,7 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
             RequestQueue requestQueue = Volley.newRequestQueue(AddBooks.this);
             requestQueue.add(validate);
 
+
         }else {
             Toast.makeText(AddBooks.this, "All fields are required", Toast.LENGTH_SHORT).show();
         }
@@ -169,6 +172,7 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
                                 Description.setText("");
                                 Title.setText("");
                                 remaining.setText("");
+
                             }
 
 
@@ -195,6 +199,9 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
             };
             RequestQueue requestQueue = Volley.newRequestQueue(AddBooks.this);
             requestQueue.add(signUprequest);
+
+        ImageUploadToServerFunction();
+
 
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -395,8 +402,10 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
 
     public void onBackPressed(){
         final String logged =  getIntent().getStringExtra("Mail");
+        final String role =  getIntent().getStringExtra("ROLE");
         Intent intent = new Intent(AddBooks.this, librarian_account.class);
         intent.putExtra("Mail",logged);
+        intent.putExtra("ROLE",role);
         startActivity(intent);
         finish();
     }

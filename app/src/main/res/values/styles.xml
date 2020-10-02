@@ -20,4 +20,8 @@
         <item name="windowNoTitle">false</item>
  </style>
 
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">
+
+    </style>
+
 </resources>

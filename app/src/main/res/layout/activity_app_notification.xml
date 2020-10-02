@@ -5,13 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".AppNotification">
+    tools:context=".activities.AppNotification">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:id="@+id/notificationprofile"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
 
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="Notifications"
+    android:textSize="20sp"
+    android:textColor="@color/black"
+    android:paddingTop="5dp"
+    android:layout_marginLeft="100dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginStart="100dp"
+    android:layout_marginEnd="5dp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userAccount"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/ic_account"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@android:color/darker_gray"
+
+            android:layout_marginEnd="30dp" />
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/nRecyclerView"
-        android:background="@android:color/darker_gray"
+        android:background="@color/white"
         android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="60dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
