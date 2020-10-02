@@ -101,7 +101,7 @@ public class AppNotification extends AppCompatActivity{
 
         }else if(role.equals("user")){
             bottomNavigationView.setVisibility(View.VISIBLE);
-            userAcct.setVisibility(View.GONE);
+            userAcct.setVisibility(View.INVISIBLE);
             bottomNavigationView.getMenu().findItem(R.id.favBooks).setVisible(false);
 
         }
@@ -206,7 +206,7 @@ public class AppNotification extends AppCompatActivity{
                                     }else if(role.equals("Admin")){
                                         bookList.add(new Notification(Cover, Title,Author, requestedBy, nId, status, isbn));
                                     }
-                                notificationAdapter = new NotificationAdapter(AppNotification.this, bookList, isbn);
+                                notificationAdapter = new NotificationAdapter(AppNotification.this, bookList, isbn, role);
                                 recyclerView.setAdapter(notificationAdapter);
                             }
                         }

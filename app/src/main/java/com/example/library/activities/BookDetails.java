@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,8 +41,9 @@ import static com.example.library.activities.AppHome.UPLOADED_BY;
 
 public class BookDetails extends AppCompatActivity {
 ImageView background_image, bookCover;
-ToggleButton borrowBtn;
+Button borrowBtn;
 TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailable, descriptions;
+
 
     String validate_url = "http://192.168.43.225/library/validate_request.php";
     String addNotificationurl = "http://192.168.43.225/library/add_notification.php";
@@ -51,6 +54,15 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
 
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                //create your changes here
+//            }
+//        }, 3000);
+
+
         Intent intent = getIntent();
         String coverUrl = intent.getStringExtra(COVER_URL);
         String title = intent.getStringExtra(TITLE);
@@ -58,7 +70,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         String description = intent.getStringExtra(DESCRIPTIONS);
         final String remaining = intent.getStringExtra(AVAILABLE);
         String category = intent.getStringExtra(CATEGORY);
-        String isbn = intent.getStringExtra(ISBN);
+        String theisbn = intent.getStringExtra(ISBN);
         String uploader = intent.getStringExtra(UPLOADED_BY);
         final String reqs = intent.getStringExtra(REQUESTS);
         String logged = intent.getStringExtra("Mail");
@@ -78,7 +90,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         Picasso.get().load(coverUrl).fit().transform(new BlurTransformation(this, 50, 1)).into(background_image);
         bookTitle.setText(title);
         bookAuthor.setText(author);
-        bookISBN.setText("ISBN: " + isbn);
+        bookISBN.setText("ISBN: " + theisbn);
         bookCategory.setText(category);
         booksAvailable.setText(remaining + " books Available");
         uploadedBy.setText("Uploaded by " + uploader);
@@ -93,32 +105,29 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
             borrowBtn.setVisibility(View.VISIBLE);
         }
 
-
-
-
-        borrowBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        borrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(borrowBtn.isChecked()){
-                    borrowBtn.setTextOn("Request");
-                        validate();
-                }else{
-                    borrowBtn.setTextOff("Request");
-                }
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                String theisbn = intent.getStringExtra(ISBN);
+                validate(theisbn);
             }
         });
+
+
+
     }
 
 
 
 
-    public  void validate(){
+    public  void validate(final String ISbn){
             StringRequest validate = new StringRequest(Request.Method.POST, validate_url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             if(response.equals("Can't create request")){
-                                Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BookDetails.this, "can't re-request this book", Toast.LENGTH_SHORT).show();
                             }else if(response.equals("dont Exist")){
                                 Intent intent = getIntent();
                                 final String reqs = intent.getStringExtra(REQUESTS);
@@ -127,8 +136,13 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                                 int r = request + 1;
                                 String R = Integer.toString(r);
 
+
+//                                update request number to the books table
                                 addRequest(R);
-                                sendData();
+
+//                                adds book request to the notification table
+                                sendData(ISbn);
+
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -183,18 +197,25 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         requestQueue.add(validate);
     }
 
-    public void sendData(){
-
-            StringRequest addNotification = new StringRequest(Request.Method.POST, addNotificationurl,
+    public void sendData(final String isBn){
+        Intent intent = getIntent();
+        final String coverUrl = intent.getStringExtra(COVER_URL);
+        final String title = intent.getStringExtra(TITLE);
+        final String author = intent.getStringExtra(AUTHOR);
+        final String isbn = intent.getStringExtra(ISBN);
+        final String logged = intent.getStringExtra("Mail");
+        final String views = "Admin";
+        StringRequest addNotification = new StringRequest(Request.Method.POST, addNotificationurl,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            if(response.equals("notificationAdded")){
-                                borrowBtn.setTextOn("Requested");
+                            if(response.equals("Requested")){
+                                borrowBtn.setText("Requested");
+                                Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
 
+                            }else if(response.equals("Error")){
                                 Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -204,23 +225,15 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                 }
             }){
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
+                protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
-                    Intent intent = getIntent();
-                    String coverUrl = intent.getStringExtra(COVER_URL);
-                    String title = intent.getStringExtra(TITLE);
-                    String author = intent.getStringExtra(AUTHOR);
-                    String isbn = intent.getStringExtra(ISBN);
-                    String logged = intent.getStringExtra("Mail");
-                    String views = "Admin";
                     params.put("cover", coverUrl);
                     params.put("title", title);
                     params.put("author", author);
                     params.put("requestedby", logged);
                     params.put("views", views);
-                    params.put("isbn",isbn);
+                    params.put("isbn",isBn);
                     params.put("status","Requested");
-
                     return params;
                 }
             };
@@ -239,6 +252,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         startActivity(intent);
         finish();
     }
+
 
 
 }

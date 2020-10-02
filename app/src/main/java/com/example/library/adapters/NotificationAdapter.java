@@ -44,16 +44,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     private Context mycontext;
     private ArrayList<Notification> myarrayList;
-    public String bookisbn;
+    public String bookisbn, userRole;
     String update_notification_url = "http://192.168.43.225/library/updateRequest.php";
-    String update_remaining_url = "http://192.168.43.225/library/updateRemaining.php";
-    String get_requested_bookUrl = "http://192.168.43.225/library/get_requested_book.php";
+    String delete_notification_url = "http://192.168.43.225/library/deleteRequest.php";
 
 
-    public NotificationAdapter(Context context, ArrayList<Notification> arrayList, String isbn){
+    public NotificationAdapter(Context context, ArrayList<Notification> arrayList, String isbn, String role){
         myarrayList = arrayList;
         mycontext = context;
         bookisbn = isbn;
+        userRole = role;
     }
 
     @NonNull
@@ -71,7 +71,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         String title = currentNotification.getnBookTitle();
         String author = currentNotification.getnBookAuthor();
         String cover = currentNotification.getnBookCover();
-        String requestedBy = currentNotification.getNrequestedBy();
+        final String requestedBy = currentNotification.getNrequestedBy();
         final String noteId = currentNotification.getnId();
         String status = currentNotification.getnStatus();
         final String isbn = currentNotification.getnIsbn();
@@ -86,82 +86,54 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
 
 
-        holder.approve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialogBox(holder.approve, noteId);
-            }
-        });
+
 
         if(status.equals("Requested")){
-            holder.approve.setText("Requested");
-        }else if(status.equals("Approved")){
-            holder.approve.setText("Approved");
+            holder.approve.setText("Approve");
+        }else if(status.equals("Approved") && userRole.equals("user")){
+            holder.approve.setText("Return");
+        }else if (status.equals("Approved") && userRole.equals("Admin")){
+            holder.approve.setText("Returned");
         }
 
 
+
+        holder.approve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userRole.equals("Admin")){
+                    if(holder.approve.getText().toString().equals("Received")){
+                        Toast.makeText(mycontext, "This book was returned", Toast.LENGTH_SHORT).show();
+                    }else if(!(holder.approve.getText().toString().equals("Received"))){
+                        openDialogBox(holder.approve, noteId, requestedBy);
+                    }
+                }else if(userRole.equals("user")){
+                    Toast.makeText(mycontext, "Please Return On Time", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
-    private void openDialogBox(final Button holder, final String noteId) {
+    private void openDialogBox(final Button holder, final String noteId, final String reqBy) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(mycontext);
         // Set the message show for the Alert time
         builder.setMessage("Are you sure you want to make this change?");
         // Set Alert Title
-        builder.setTitle("📙 Library");
+        builder.setTitle("⚠ " + holder.getText().toString());
         builder.setCancelable(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (holder.getText().toString().equals("Returned")){
-                    deleteRequest();
-                }else if(holder.getText().toString().equals("Approve")){
 
-
+                if (holder.getText().toString().equals("Approve")){
+                    updateRequest(noteId,bookisbn, update_notification_url);
                     holder.setText("Returned");
-
-
-                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, get_requested_bookUrl, null,
-                            new Response.Listener<JSONArray>() {
-                                @Override
-                                public void onResponse(JSONArray response) {
-                                    try {
-                                        for(int i = 0; i < response.length(); i++){
-                                            JSONObject jsonObject = response.getJSONObject(i);
-                                            String remaining = jsonObject.getString("Remaining");
-                                            Toast.makeText(mycontext, remaining, Toast.LENGTH_SHORT).show();
-                                            int remain = Integer.parseInt(remaining) - 1;
-                                            Toast.makeText(mycontext, Integer.toString(remain), Toast.LENGTH_SHORT).show();
-                                            updateRequest(noteId, Integer.toString(remain),bookisbn, update_notification_url);
-                                            updateRequest(noteId, Integer.toString(remain),bookisbn, update_remaining_url);
-                                        }
-                                    }
-                                    catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-
-                                }
-                            }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("isbn",bookisbn);
-                            return params;
-                        }
-                    };
-                    RequestQueue requestQueue = Volley.newRequestQueue(mycontext);
-                    requestQueue.add(jsonArrayRequest);
-
-
-
-
-
+                }else if(holder.getText().toString().equals("Returned")){
+                    holder.setText("Received");
+                    deleteRequest(bookisbn, delete_notification_url, reqBy);
                 }
+
             }
         });
 
@@ -177,12 +149,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         alertDialog.show();
     }
 
-    private void updateRequest(final String id,final String remaining, final String isbn, final String url) {
+    private void updateRequest(final String id, final String isbn, final String url) {
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        Toast.makeText(mycontext, response, Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -196,7 +168,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("id", id);
-                params.put("remaining", remaining);
                 params.put("isbn", isbn);
                 return params;
             }
@@ -205,8 +176,31 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         requestQueue.add(request);
     }
 
-    private void deleteRequest() {
-
+    private void deleteRequest(final String isbn, final String url, final String reqby) {
+        StringRequest delete = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(mycontext, "The book received successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(mycontext, error.getMessage(), Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+            }
+        }){
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("requestedby", reqby);
+                params.put("isbn", isbn);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(mycontext);
+        requestQueue.add(delete);
     }
 
 
