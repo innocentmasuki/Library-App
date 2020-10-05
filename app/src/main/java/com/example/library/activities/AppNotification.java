@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,7 @@ public class AppNotification extends AppCompatActivity{
     RecyclerView notificationRecycler;
     ImageView userAcount;
     View userAcct;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,8 @@ public class AppNotification extends AppCompatActivity{
 
         userAcount = findViewById(R.id.userAccount);
         userAcct = findViewById(R.id.notificationprofile);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+
         getUserImage();
 
         userAcount.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +82,7 @@ public class AppNotification extends AppCompatActivity{
 
 
 
-        ArrayList<Notification> notificationList = new ArrayList<>();
+        final ArrayList<Notification> notificationList = new ArrayList<>();
 
         assert role != null;
         if(role.equals("Admin")){
@@ -89,7 +93,20 @@ public class AppNotification extends AppCompatActivity{
 
 
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(role.equals("Admin")){
+                    notificationList.clear();
+                    parseJSON(get_Admin_alert,notificationRecycler, notificationList, "Admin");
+                }else if(role.equals("user")){
+                    notificationList.clear();
 
+                    parseJSON(get_User_alert,notificationRecycler, notificationList, "user");
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
 
 
@@ -152,6 +169,9 @@ public class AppNotification extends AppCompatActivity{
                 return false;
             }
         });
+
+
+
     }
 
 
@@ -214,6 +234,7 @@ public class AppNotification extends AppCompatActivity{
                                     }
                                 notificationAdapter = new NotificationAdapter(AppNotification.this, bookList, isbn, role, logged);
                                 recyclerView.setAdapter(notificationAdapter);
+
 
                             }
                         }

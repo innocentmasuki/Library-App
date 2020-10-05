@@ -2,6 +2,7 @@ package com.example.library.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +45,7 @@ import static com.example.library.activities.AppHome.UPLOADED_BY;
 public class BookDetails extends AppCompatActivity {
 ImageView background_image, bookCover;
 Button borrowBtn;
+SwipeRefreshLayout swipeRefreshLayout;
 TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailable, descriptions;
 
 
@@ -65,7 +67,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
 //        }, 3000);
 
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String coverUrl = intent.getStringExtra(COVER_URL);
         String title = intent.getStringExtra(TITLE);
         String author = intent.getStringExtra(AUTHOR);
@@ -87,6 +89,18 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         booksAvailable = findViewById(R.id.availableBooks);
         uploadedBy = findViewById(R.id.uploadedBy);
         descriptions = findViewById(R.id.details);
+        swipeRefreshLayout = findViewById(R.id.detailsrefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent intent = getIntent();
+                startActivity(intent);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
 
         Picasso.get().load(coverUrl).fit().into(bookCover);
         Picasso.get().load(coverUrl).fit().transform(new BlurTransformation(this, 50, 1)).into(background_image);

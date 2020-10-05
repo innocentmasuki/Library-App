@@ -50,6 +50,7 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
             @Override
             public void onClick(View v) {
                 getData();
+                logInBtn.setEnabled(false);
             }
         });
 
@@ -80,6 +81,7 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
 
                             }else if(response.equals("Incorrect Password or Mail")){
                                 progressBar.setVisibility(View.INVISIBLE);
+                                logInBtn.setEnabled(true);
                                 Toast.makeText(LogIn.this, response, Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -103,6 +105,7 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
             requestQueue.add(request);
 
         }else {
+            logInBtn.setEnabled(true);
             Toast.makeText(LogIn.this, "All Blanks must be filled", Toast.LENGTH_SHORT).show();
         }
 

@@ -47,10 +47,43 @@ public class AppSearch extends AppCompatActivity {
         setContentView(R.layout.activity_app_search);
         final String logged =  getIntent().getStringExtra("Mail");
         final String role =  getIntent().getStringExtra("ROLE");
+        EditText searchbar = findViewById(R.id.search_bar);
 
          allRecyclerView = findViewById(R.id.allbookrecycler);
         allRecyclerView.setHasFixedSize(true);
-        allRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            allRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+            searchbar.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                    filter(s.toString());
+                }
+            });
+        } else {
+            allRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+            searchbar.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                    filter(s.toString());
+                }
+            });
+        }
+
+
 
          allBookList = new ArrayList<>();
 
@@ -58,7 +91,7 @@ public class AppSearch extends AppCompatActivity {
 
 
 
-        EditText searchbar = findViewById(R.id.search_bar);
+
         searchbar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -142,8 +175,6 @@ public class AppSearch extends AppCompatActivity {
                 filteredList.add(item);
             }else if(item.getIsbn().toLowerCase().contains(text.toLowerCase())){
                 filteredList.add(item);
-            }else if(item.getCategory().toLowerCase().contains(text.toLowerCase())){
-                filteredList.add(item);
             }
         }
         myBooksAdapter.filterList(filteredList);
@@ -193,12 +224,7 @@ public class AppSearch extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        allRecyclerView.setLayoutManager(new GridLayoutManager(this, newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3));
-        super.onConfigurationChanged(newConfig);
-    }
+
 
     public void onBackPressed() {
         final String logged =  getIntent().getStringExtra("Mail");
