@@ -132,12 +132,17 @@ Bitmap bitmap;
         newPass = newPassword.getText().toString();
         conPass = confirmedPwd.getText().toString();
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String namePattern = "(?=^.{0,50}$)^[a-zA-Z-]+\\s[a-zA-Z-]+$";
 
         if(!name.equals("") || !email.equals("") || !newPass.equals("") || !conPass.equals("")){
 
             if(!(email.matches(emailPattern))){
                 Toast.makeText(this, "Enter Valid Email", Toast.LENGTH_SHORT).show();
-            }else{
+            }else if(!(name.matches(namePattern))){
+                Toast.makeText(this, "Enter Valid Name", Toast.LENGTH_SHORT).show();
+            }
+
+            else{
                 StringRequest validate = new StringRequest(Request.Method.POST, validate_url,
                         new Response.Listener<String>() {
                             @Override
