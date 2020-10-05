@@ -44,16 +44,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     private Context mycontext;
     private ArrayList<Notification> myarrayList;
-    public String bookisbn, userRole;
+    public String bookisbn, userRole, userEmail;
     String update_notification_url = "http://192.168.43.225/library/updateRequest.php";
     String delete_notification_url = "http://192.168.43.225/library/deleteRequest.php";
 
 
-    public NotificationAdapter(Context context, ArrayList<Notification> arrayList, String isbn, String role){
+    public NotificationAdapter(Context context, ArrayList<Notification> arrayList, String isbn, String role, String userMail){
         myarrayList = arrayList;
         mycontext = context;
         bookisbn = isbn;
         userRole = role;
+        userEmail = userMail;
     }
 
     @NonNull
@@ -75,13 +76,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         final String noteId = currentNotification.getnId();
         String status = currentNotification.getnStatus();
         final String isbn = currentNotification.getnIsbn();
+        String approvedBy = currentNotification.getApprovedBy();
 
         holder.noteStatus.setText(status);
         holder.noteIsbn.setText(isbn);
         holder.notificationId.setText(noteId);
         holder.bookTitle.setText(title);
         holder.bookAuthor.setText(author);
-        holder.requestedBy.setText("Requested By: " + requestedBy);
+
         Picasso.get().load(cover).fit().centerInside().into(holder.bookCover);
 
 
@@ -90,10 +92,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         if(status.equals("Requested")){
             holder.approve.setText("Approve");
+            holder.requestedBy.setText("Requested By: " + requestedBy);
         }else if(status.equals("Approved") && userRole.equals("user")){
             holder.approve.setText("Return");
+            holder.requestedBy.setText("Approved by: " + approvedBy);
         }else if (status.equals("Approved") && userRole.equals("Admin")){
             holder.approve.setText("Returned");
+            holder.requestedBy.setText("Approved by: " + approvedBy);
         }
 
 
@@ -120,7 +125,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         // Set the message show for the Alert time
         builder.setMessage("Are you sure you want to make this change?");
         // Set Alert Title
-        builder.setTitle("⚠ " + holder.getText().toString());
+        builder.setTitle("⚠ " + holder.getText().toString() + " ?");
         builder.setCancelable(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -169,6 +174,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("id", id);
                 params.put("isbn", isbn);
+                params.put("email", userEmail);
                 return params;
             }
         };
@@ -176,12 +182,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         requestQueue.add(request);
     }
 
-    private void deleteRequest(final String isbn, final String url, final String reqby) {
+    private void deleteRequest(final String isbn, final String url, final String requby) {
+
+
         StringRequest delete = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(mycontext, "The book received successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mycontext, "Returned", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -194,7 +202,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("requestedby", reqby);
+                params.put("requestedby", requby);
                 params.put("isbn", isbn);
                 return params;
             }

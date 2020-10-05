@@ -56,10 +56,8 @@ public class signUp extends AppCompatActivity {
  Button logInbtn , signUpBtn;
  EditText fullName;
     EditText userMail;
-    RadioGroup category;
     EditText newPassword;
     EditText confirmedPwd;
-    RadioButton selectedCat;
 ProgressBar progressBar;
 ImageView userImage;
 ImageView userImage2;
@@ -82,10 +80,6 @@ Bitmap bitmap;
     String Sendurl = "http://192.168.43.225/library/register.php";
 
 
-//    String validate_url = "http://192.168.137.1/library/validate.php";
-//    String Surl = "http://192.168.137.1/library/image_upload.php";
-//    String Sendurl = "http://192.168.137.1/library/register.php";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,11 +89,8 @@ Bitmap bitmap;
         confirmedPwd =  findViewById(R.id.confirmedPassword);
         fullName = findViewById(R.id.userName);
         userMail =  findViewById(R.id.userMail);
-//        category = (RadioGroup) findViewById(R.id.category);
         logInbtn  =   findViewById(R.id.logInBtn);
         signUpBtn =  findViewById(R.id.signUpBtn);
-//        int selectedId = category.getCheckedRadioButtonId();
-//        selectedCat = (RadioButton) findViewById(selectedId);
         progressBar = findViewById(R.id.sProgressBar);
         userImage = findViewById(R.id.profileImage);
         userImage2 = findViewById(R.id.compare);
@@ -140,39 +131,47 @@ Bitmap bitmap;
         email = userMail.getText().toString();
         newPass = newPassword.getText().toString();
         conPass = confirmedPwd.getText().toString();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         if(!name.equals("") || !email.equals("") || !newPass.equals("") || !conPass.equals("")){
-            StringRequest validate = new StringRequest(Request.Method.POST, validate_url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if(response.equals("Can't create account! exixting user")){
-                                Toast.makeText(signUp.this, response, Toast.LENGTH_SHORT).show();
-                            }else if(response.equals("dont Exist")){
-                                if(!(userImage.getDrawable() == userImage2.getDrawable())){
-                                    sendData();
-                                    ImageUploadToServerFunction();
-                                }else {
-                                    Toast.makeText(signUp.this, "Choose Image", Toast.LENGTH_SHORT).show();
-                                }
 
+            if(!(email.matches(emailPattern))){
+                Toast.makeText(this, "Enter Valid Email", Toast.LENGTH_SHORT).show();
+            }else{
+                StringRequest validate = new StringRequest(Request.Method.POST, validate_url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if(response.equals("Can't create account! exixting user")){
+                                    Toast.makeText(signUp.this, response, Toast.LENGTH_SHORT).show();
+                                }else if(response.equals("dont Exist")){
+                                    if(!(userImage.getDrawable() == userImage2.getDrawable())){
+                                        sendData();
+                                        ImageUploadToServerFunction();
+                                    }else {
+                                        Toast.makeText(signUp.this, "Choose Image", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
                             }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                }
-            }){
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("email",email);
-                    return params;
-                }
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
-            requestQueue.add(validate);
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("email",email);
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
+                requestQueue.add(validate);
+            }
+
+
 
         }else {
             Toast.makeText(signUp.this, "All fields are required", Toast.LENGTH_SHORT).show();
@@ -182,7 +181,7 @@ Bitmap bitmap;
     public void sendData(){
 
 
-        final String name, email, category, password;
+        final String name, email, password;
 
         if(newPassword.getText().toString().equals(confirmedPwd.getText().toString())){
             password = confirmedPwd.getText().toString();
@@ -192,47 +191,53 @@ Bitmap bitmap;
 
         name = fullName.getText().toString();
         email = userMail.getText().toString();
-//        category = selectedCat.getText().toString();
+
+
+
 
             if (!password.equals("wrong")){
-    StringRequest signUprequest = new StringRequest(Request.Method.POST, Sendurl,
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    if(response.equals("Welcome \uD83E\uDD17")){
-                        userMail.setText("");
-                        newPassword.setText("");
-                        confirmedPwd.setText("");
-                        progressBar.setVisibility(View.VISIBLE);
-                        Toast.makeText(signUp.this, "Log In", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(signUp.this, LogIn.class);
-                        intent.putExtra("fullname", name);
-                        startActivity(intent);
-                        finish();
-                    }
+                if(!(password.length() < 8)){
+                    StringRequest signUprequest = new StringRequest(Request.Method.POST, Sendurl,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    if(response.equals("Welcome \uD83E\uDD17")){
+                                        userMail.setText("");
+                                        newPassword.setText("");
+                                        confirmedPwd.setText("");
+                                        progressBar.setVisibility(View.VISIBLE);
+                                        Toast.makeText(signUp.this, "Log In", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(signUp.this, LogIn.class);
+                                        intent.putExtra("fullname", name);
+                                        startActivity(intent);
+                                        finish();
+                                    }
 
 
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                            error.printStackTrace();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("fullname",name);
+                            params.put("email",email);
+                            params.put("password",password);
+                            return params;
+                        }
+                    };
+                    RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
+                    requestQueue.add(signUprequest);
+                }else{
+                    Toast.makeText(this, "Password must be min 8 characters", Toast.LENGTH_SHORT).show();
                 }
-            }, new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(signUp.this, error.getMessage(), Toast.LENGTH_LONG).show();
-            error.printStackTrace();
-        }
-    }){
-        @Override
-        protected Map<String, String> getParams() throws AuthFailureError {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("fullname",name);
-            params.put("email",email);
-//            params.put("category",category);
-            params.put("password",password);
-            return params;
-        }
-    };
-    RequestQueue requestQueue = Volley.newRequestQueue(signUp.this);
-    requestQueue.add(signUprequest);
+
 }else {
                 newPassword.setText("");
                 confirmedPwd.setText("");

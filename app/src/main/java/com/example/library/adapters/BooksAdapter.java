@@ -3,6 +3,8 @@ package com.example.library.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,4 +131,11 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BooksViewHol
 
         }
     }
+
+    public void filterList(ArrayList<Books> filteredList) {
+        marrayList = filteredList;
+        notifyDataSetChanged();
+    }
+
+
 }

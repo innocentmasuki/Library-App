@@ -61,7 +61,6 @@ public class AppHome extends AppCompatActivity {
 
 
     private BooksAdapter myBooksAdapter;
-    private Object Books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +105,7 @@ public class AppHome extends AppCompatActivity {
          parseJSON(get_popular_booksUrl,popularRecyclerView, popularBookList);
 
 
-         //here i was creating the user accout section
+         // creating the user accout section
         userAcount = findViewById(R.id.userAccount);
         getUserImage();
         userAcount.setOnClickListener(new View.OnClickListener() {

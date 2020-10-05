@@ -3,9 +3,11 @@ package com.example.library.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -128,9 +130,11 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                         public void onResponse(String response) {
                             if(response.equals("Can't create request")){
                                 Toast.makeText(BookDetails.this, "can't re-request this book", Toast.LENGTH_SHORT).show();
-                            }else if(response.equals("dont Exist")){
+                            }
+                            else if(response.equals("dont Exist")){
                                 Intent intent = getIntent();
                                 final String reqs = intent.getStringExtra(REQUESTS);
+
                                 assert reqs != null;
                                 int request = Integer.parseInt(reqs);
                                 int r = request + 1;
@@ -171,10 +175,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.equals("Error requesting")){
-                            Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
-                        }else if(response.equals("Requested")){
-                        }
+//                            Toast.makeText(BookDetails.this, response, Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -252,7 +253,5 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         startActivity(intent);
         finish();
     }
-
-
 
 }

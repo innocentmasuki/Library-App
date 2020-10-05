@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -85,6 +86,10 @@ public class AppNotification extends AppCompatActivity{
         }else if(role.equals("user")){
             parseJSON(get_User_alert,notificationRecycler, notificationList, "user");
         }
+
+
+
+
 
 
 
@@ -201,13 +206,15 @@ public class AppNotification extends AppCompatActivity{
                                 String nId = jsonObject.getString("Id");
                                 String status = jsonObject.getString("Status");
                                 String isbn = jsonObject.getString("Isbn");
+                                String approvedBy = jsonObject.getString("ApprovedBy");
                                     if (role.equals("user") && requestedBy.equals(logged)){
-                                        bookList.add(new Notification(Cover, Title,Author, requestedBy, nId, status, isbn));
+                                        bookList.add(new Notification(Cover, Title,Author, requestedBy, nId, status, isbn, approvedBy));
                                     }else if(role.equals("Admin")){
-                                        bookList.add(new Notification(Cover, Title,Author, requestedBy, nId, status, isbn));
+                                        bookList.add(new Notification(Cover, Title,Author, requestedBy, nId, status, isbn, approvedBy));
                                     }
-                                notificationAdapter = new NotificationAdapter(AppNotification.this, bookList, isbn, role);
+                                notificationAdapter = new NotificationAdapter(AppNotification.this, bookList, isbn, role, logged);
                                 recyclerView.setAdapter(notificationAdapter);
+
                             }
                         }
                         catch (JSONException e) {

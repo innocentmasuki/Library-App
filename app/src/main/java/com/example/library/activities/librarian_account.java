@@ -56,8 +56,6 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
 
 
 
-
-
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, getUserInfo_url, null,
                 new Response.Listener<JSONArray>() {
                     @Override

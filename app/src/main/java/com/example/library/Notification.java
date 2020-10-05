@@ -1,9 +1,9 @@
 package com.example.library;
 
 public class Notification {
-    String nBookCover, nBookTitle, nBookAuthor, nrequestedBy, nId, nStatus, nIsbn;
+    String nBookCover, nBookTitle, nBookAuthor, nrequestedBy, nId, nStatus, nIsbn, approvedBy;
 
-    public Notification(String bookCover, String bookTitle, String bookAuthor, String requestedBy, String id, String status, String isbn) {
+    public Notification(String bookCover, String bookTitle, String bookAuthor, String requestedBy, String id, String status, String isbn, String approvedby) {
 
         this.setnBookAuthor(bookAuthor);
         this.setnBookTitle(bookTitle);
@@ -12,8 +12,17 @@ public class Notification {
         this.setnId(id);
         this.setnStatus(status);
         this.setnIsbn(isbn);
+        this.setApprovedBy(approvedby);
+
     }
 
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+
+    public void setApprovedBy(String approveBy) {
+        this.approvedBy = approveBy;
+    }
 
     public String getnIsbn() {
         return nIsbn;

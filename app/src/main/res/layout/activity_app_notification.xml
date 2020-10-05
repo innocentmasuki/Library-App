@@ -45,6 +45,17 @@
         android:layout_marginTop="70dp"
         android:layout_marginBottom="60dp"/>
 
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Nothing To Show"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="24sp"-->
+
+<!--        android:id="@+id/nothing"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:gravity="center_horizontal" />-->
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

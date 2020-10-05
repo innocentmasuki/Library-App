@@ -5,7 +5,7 @@
     <string name="log_in">log in</string>
     <string name="remember_me">Remember Me</string>
     <string name="sign_up">Sign Up</string>
-    <string name="searchHint">Search titles, author or reading lists</string>
+    <string name="searchHint">Search titles, author, category or ISBN</string>
     <string name="create_password">create password</string>
     <string name="confirm_password">confirm password</string>
     <string name="full_name">Full Name</string>
@@ -29,6 +29,7 @@
     <string name="borrow">Borrow</string>
     <string name="request">Request</string>
     <string name="available_books">Available Books</string>
+    <string name="browse_books">Browse books</string>
 
     <string-array name="bookCategory">
         <item>Programming</item>
