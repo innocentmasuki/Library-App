@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LogIn">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/luserMail"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/userMail"
+                android:gravity="start"
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="12dp"
+                android:hint="@string/userMail"
+                android:paddingLeft="15dp"
+                android:textSize="15sp"
+                android:paddingRight="15dp"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_email"
+                android:paddingStart="15dp" />
+
+
+            <EditText
+                android:layout_width="240dp"
+                android:inputType="textPassword"
+                android:id="@+id/luserPassword"
+                android:layout_height="wrap_content"
+                android:drawablePadding="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textSize="15sp"
+                android:hint="@string/userPassword"
+                android:drawableStart="@drawable/ic_lock"
+                android:autofillHints="@string/userPassword"
+                android:gravity="start"
+                android:drawableLeft="@drawable/ic_lock"
+                android:paddingStart="16dp" />
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/remember_me"
+                android:id="@+id/rememberMe"
+                android:textSize="15sp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginStart="80dp">
+            <Button
+                android:layout_width="wrap_content"
+                android:id="@+id/mainlogInBtn"
+                android:paddingHorizontal="70dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:text="@string/log_in"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/lsignUpBtn"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_up"
+                android:layout_marginTop="30dp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:gravity="center_horizontal" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:foregroundGravity="center"
+        android:visibility="invisible"
+        android:id="@+id/lprogressBar"/>
+
+
+
+</RelativeLayout>

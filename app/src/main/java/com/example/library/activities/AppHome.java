@@ -75,15 +75,15 @@ public class AppHome extends AppCompatActivity {
 
 
 //these are recycler views
-        RecyclerView recentRecyclerView = findViewById(R.id.recentRecyclerView);
-        RecyclerView popularRecyclerView = findViewById(R.id.popularRecyclerView);
-        RecyclerView programmingRecyclerView = findViewById(R.id.programmingRecyclerView);
-        RecyclerView novelRecyclerView = findViewById(R.id.novelRecyclerView);
+        RecyclerView recentRecyclerView = (RecyclerView) findViewById(R.id.recentRecyclerView);
+        RecyclerView popularRecyclerView = (RecyclerView)  findViewById(R.id.popularRecyclerView);
+        RecyclerView programmingRecyclerView = (RecyclerView)  findViewById(R.id.programmingRecyclerView);
+        RecyclerView novelRecyclerView = (RecyclerView)  findViewById(R.id.novelRecyclerView);
 
-        recentRecyclerView.setHasFixedSize(true);
-        popularRecyclerView.setHasFixedSize(true);
-        programmingRecyclerView.setHasFixedSize(true);
-        novelRecyclerView.setHasFixedSize(true);
+        recentRecyclerView.setHasFixedSize(false);
+        popularRecyclerView.setHasFixedSize(false);
+        programmingRecyclerView.setHasFixedSize(false);
+        novelRecyclerView.setHasFixedSize(false);
 
         recentRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
         popularRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false ));
