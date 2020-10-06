@@ -25,7 +25,7 @@ public class Welcome extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LogIn.class));
                 finish();
             }
-        }, 3000);
+        }, 2000);
     }
 
 

@@ -45,7 +45,6 @@ import static com.example.library.activities.AppHome.UPLOADED_BY;
 public class BookDetails extends AppCompatActivity {
 ImageView background_image, bookCover;
 Button borrowBtn;
-SwipeRefreshLayout swipeRefreshLayout;
 TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailable, descriptions;
 
 
@@ -84,16 +83,18 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         booksAvailable = findViewById(R.id.availableBooks);
         uploadedBy = findViewById(R.id.uploadedBy);
         descriptions = findViewById(R.id.details);
-        swipeRefreshLayout = findViewById(R.id.detailsrefresh);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Intent intent = getIntent();
-                startActivity(intent);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+
+//        swipeRefreshLayout = findViewById(R.id.detailsrefresh);
+//
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                Intent intent = getIntent();
+//                startActivity(intent);
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
 
 
 
