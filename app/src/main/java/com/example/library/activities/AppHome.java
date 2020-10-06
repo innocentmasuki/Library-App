@@ -67,7 +67,6 @@ public class AppHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_home);
 
-         final String fullname =  getIntent().getStringExtra("fullname");
          final String role =  getIntent().getStringExtra("ROLE");
          final String logged =  getIntent().getStringExtra("Mail");
 
@@ -115,7 +114,6 @@ public class AppHome extends AppCompatActivity {
                 Intent intent = new Intent(AppHome.this, librarian_account.class);
                 intent.putExtra("Mail",logged);
                 intent.putExtra("ROLE",role);
-                intent.putExtra("fullname",fullname);
                 startActivity(intent);
                 finish();
             }

@@ -22,13 +22,13 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppCustomTheme" />
         <activity android:name=".activities.FavBooks" />
-        <activity android:name=".activities.AppSearch" />
+        <activity android:name=".activities.AppSearch"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activities.AppHome" />
         <activity android:name=".activities.signUp" />
         <activity android:name=".activities.Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -168,7 +169,13 @@ public class librarian_account extends AppCompatActivity implements NavigationVi
                             public void onClick(DialogInterface dialog,
                                                 int which)
                             {
-                                startActivity(new Intent(librarian_account.this, signUp.class));
+                                SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("remember", "false");
+                                editor.putString("email", "");
+                                editor.putString("password", "");
+                                editor.apply();
+                                startActivity(new Intent(librarian_account.this, LogIn.class));
                                 finish();
                             }
                         });

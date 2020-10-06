@@ -116,6 +116,11 @@ public class EditAccount extends AppCompatActivity {
                     };
                     RequestQueue requestQueue = Volley.newRequestQueue(EditAccount.this);
                     requestQueue.add(request);
+
+                    newChPassword.setText("");
+                    conChPassword.setText("");
+                    Toast.makeText(EditAccount.this, "Password changed successfully", Toast.LENGTH_SHORT).show();
+
                 }
 
                 else{
@@ -145,10 +150,8 @@ public class EditAccount extends AppCompatActivity {
                         public void onResponse(String response) {
                             if(response.equals("Name changed Successfully")){
                                 changedName.setText("");
-                                Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
 
                             }else if(response.equals("Can't change Try again Later ...")){
-                                Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -168,8 +171,10 @@ public class EditAccount extends AppCompatActivity {
             };
             RequestQueue requestQueue = Volley.newRequestQueue(EditAccount.this);
             requestQueue.add(request);
+            changedName.setText("");
+            Toast.makeText(EditAccount.this, "Name changed successfully", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this, "Enter a valid Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Enter a valid Full Name", Toast.LENGTH_SHORT).show();
         }
 
 

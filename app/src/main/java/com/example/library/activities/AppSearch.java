@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.EditText;
 
@@ -51,46 +52,7 @@ public class AppSearch extends AppCompatActivity {
 
          allRecyclerView = findViewById(R.id.allbookrecycler);
         allRecyclerView.setHasFixedSize(true);
-
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            allRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-            searchbar.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-                @Override
-                public void afterTextChanged(Editable s) {
-                    filter(s.toString());
-                }
-            });
-        } else {
-            allRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-            searchbar.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-                @Override
-                public void afterTextChanged(Editable s) {
-                    filter(s.toString());
-                }
-            });
-        }
-
-
-
-         allBookList = new ArrayList<>();
-
-        parseJSON(get_All_booksUrl,allRecyclerView, allBookList);
-
-
-
+        allBookList = new ArrayList<>();
 
         searchbar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -101,13 +63,22 @@ public class AppSearch extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                filter(s.toString());
+               filter(s.toString());
             }
         });
-        
-        
 
 
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            allRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        }else{
+            searchbar.setText(null);
+            allRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
+        }
+
+
+
+
+        parseJSON(get_All_booksUrl,allRecyclerView, allBookList);
 
 
 
@@ -166,7 +137,7 @@ public class AppSearch extends AppCompatActivity {
         });
     }
 
-    private void filter(String text) {
+    public void filter(String text) {
         ArrayList<com.example.library.Books> filteredList = new ArrayList<>();
         for (com.example.library.Books item : allBookList) {
             if (item.getTitle().toLowerCase().contains(text.toLowerCase())) {
@@ -174,6 +145,8 @@ public class AppSearch extends AppCompatActivity {
             }else if(item.getAuthor().toLowerCase().contains(text.toLowerCase())){
                 filteredList.add(item);
             }else if(item.getIsbn().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(item);
+            }else if(item.getCategory().toLowerCase().contains(text.toLowerCase())){
                 filteredList.add(item);
             }
         }

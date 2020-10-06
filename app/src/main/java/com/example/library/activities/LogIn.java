@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ import java.util.Map;
 public class LogIn extends AppCompatActivity {
     TextView lemail;
     Button logInBtn;
+    CheckBox rememberMe;
     TextView signUp;
     TextView lpass;
     ProgressBar progressBar;
@@ -47,6 +51,45 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
         lpass = findViewById(R.id.luserPassword);
         progressBar = findViewById(R.id.lprogressBar);
         signUp = findViewById(R.id.lsignUpBtn);
+        rememberMe = findViewById(R.id.rememberMe);
+
+
+        SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
+        String checkbox = preferences.getString("remember", "");
+        String mail = preferences.getString("email", "");
+        String pass = preferences.getString("password", "");
+        lemail.setText(mail);
+        lpass.setText(pass);
+
+        if(checkbox.equals("true")){
+            getData();
+        }
+
+
+
+        rememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isChecked()){
+
+                    String email = lemail.getText().toString();
+                    String password = lpass.getText().toString();
+                    SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("remember", "true");
+                    editor.putString("email", email);
+                    editor.putString("password", password);
+                    editor.apply();
+                }else if(!buttonView.isChecked()){
+                    SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("remember", "false");
+                    editor.putString("email", "");
+                    editor.putString("password", "");
+                    editor.apply();
+                }
+            }
+        });
 
         logInBtn = findViewById(R.id.mainlogInBtn);
 
@@ -54,7 +97,6 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
             @Override
             public void onClick(View v) {
                 getData();
-                logInBtn.setEnabled(false);
             }
         });
 
@@ -76,7 +118,6 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
 
 
         final String  email, password;
-        final String fullname =  getIntent().getStringExtra("fullname");
 
         email = lemail.getText().toString();
         password = lpass.getText().toString();
@@ -89,12 +130,11 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
                         public void onResponse(String response) {
                             if(response.equals("Welcome")){
                                 progressBar.setVisibility(View.VISIBLE);
-                                checkUserRole(email, fullname);
+                                checkUserRole(email);
 
 
                             }else if(response.equals("Incorrect Password or Mail")){
                                 progressBar.setVisibility(View.INVISIBLE);
-                                logInBtn.setEnabled(true);
                                 Toast.makeText(LogIn.this, response, Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -118,14 +158,13 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
             requestQueue.add(request);
 
         }else {
-            logInBtn.setEnabled(true);
             Toast.makeText(LogIn.this, "All Blanks must be filled", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    private void checkUserRole(final String email, final String fullName) {
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, getUserInfo_url, null,
+    private void checkUserRole(final String email) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,   getUserInfo_url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -137,14 +176,12 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
                                     Intent intent = new Intent(LogIn.this, AppNotification.class);
                                     intent.putExtra("Mail",email);
                                     intent.putExtra("ROLE","Admin");
-                                    intent.putExtra("fullname",fullName);
                                     startActivity(intent);
                                     finish();
                                 }else if (jsonObject.getString("Email").equals(email) && jsonObject.getString("Category").equals("")){
                                     Intent intent = new Intent(LogIn.this, AppHome.class);
                                     intent.putExtra("Mail",email);
                                     intent.putExtra("ROLE","user");
-                                    intent.putExtra("fullname",fullName);
                                     startActivity(intent);
                                     finish();
                                 }

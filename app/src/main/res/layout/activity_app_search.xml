@@ -9,15 +9,16 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
+        android:maxHeight="35dp"
         android:hint="@string/searchHint"
         android:background="@drawable/search_bar"
         android:drawableStart="@drawable/ic_search_bar"
         android:layout_marginHorizontal="40dp"
         android:drawablePadding="12dp"
         android:paddingLeft="15dp"
-        android:id="@+id/search_bar"
         android:paddingRight="15dp"
+        android:id="@+id/search_bar"
         android:textSize="16sp"
         android:padding="5dp"
         android:layout_marginTop="40dp"
@@ -42,18 +43,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/browse_books"
+                android:text="Browse books"
                 android:textSize="20sp"
+                android:id="@+id/browse"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginLeft="30dp"
                 android:layout_marginVertical="5dp"
                 />
 
-          <androidx.recyclerview.widget.RecyclerView
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@+id/allbookrecycler"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/allbookrecycler"/>
         </LinearLayout>
     </ScrollView>
 
