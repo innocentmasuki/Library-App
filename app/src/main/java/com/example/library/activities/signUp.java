@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -53,7 +54,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class signUp extends AppCompatActivity {
- Button logInbtn , signUpBtn;
+ Button  signUpBtn;
  EditText fullName;
     EditText userMail;
     EditText newPassword;
@@ -61,6 +62,7 @@ public class signUp extends AppCompatActivity {
 ProgressBar progressBar;
 ImageView userImage;
 ImageView userImage2;
+TextView logInbtn;
 
 Uri uri;
 

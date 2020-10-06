@@ -30,6 +30,8 @@
     <string name="request">Request</string>
     <string name="available_books">Available Books</string>
     <string name="browse_books">Browse books</string>
+    <string name="notifications">Notifications</string>
+    <string name="app_names">CIVE LIBRARY BOOKS</string>
 
     <string-array name="bookCategory">
         <item>Programming</item>

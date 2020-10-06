@@ -133,15 +133,16 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
 
-            <Button
+            <TextView
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/log_in"
                 android:id="@+id/logInBtn"
-                android:background="@color/white"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimary"/>
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
     </LinearLayout>

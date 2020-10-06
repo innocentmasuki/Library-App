@@ -68,6 +68,17 @@
             android:textStyle="bold"
             />
 
+        <TextView
+            android:layout_width="280dp"
+            android:id="@+id/lsignUpBtn"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:gravity="center_horizontal" />
+
 
     </LinearLayout>
 

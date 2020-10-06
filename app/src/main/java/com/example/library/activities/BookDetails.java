@@ -59,12 +59,7 @@ TextView bookTitle, bookAuthor, bookISBN, bookCategory, uploadedBy, booksAvailab
         setContentView(R.layout.activity_book_details);
 
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                //create your changes here
-//            }
-//        }, 3000);
+
 
 
         final Intent intent = getIntent();

@@ -80,45 +80,54 @@ public class EditAccount extends AppCompatActivity {
         newPass = newChPassword.getText().toString();
         conPass = conChPassword.getText().toString();
 
+
         final String logged =  getIntent().getStringExtra("Mail");
 
         if (!newPass.equals("") || !conPass.equals("")){
-            if(newPass.equals(conPass)){
-                StringRequest request = new StringRequest(Request.Method.POST, update_password_url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                if(response.equals("Succesfully update")){
-                                    newChPassword.setText("");
-                                    conChPassword.setText("");
-                                    Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
+            if(!(newPass.length() < 8) || !(conPass.length() < 8)){
+                if(newPass.equals(conPass)){
+                    StringRequest request = new StringRequest(Request.Method.POST, update_password_url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    if(response.equals("Succesfully update")){
+                                        newChPassword.setText("");
+                                        conChPassword.setText("");
+                                        Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
 
-                                }else if(response.equals("Try again Later ...")){
-                                    Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
+                                    }else if(response.equals("Try again Later ...")){
+                                        Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(EditAccount.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("email", logged);
-                        params.put("password",conPass);
-                        return params;
-                    }
-                };
-                RequestQueue requestQueue = Volley.newRequestQueue(EditAccount.this);
-                requestQueue.add(request);
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(EditAccount.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                            error.printStackTrace();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("email", logged);
+                            params.put("password",conPass);
+                            return params;
+                        }
+                    };
+                    RequestQueue requestQueue = Volley.newRequestQueue(EditAccount.this);
+                    requestQueue.add(request);
+                }
+
+                else{
+                    newChPassword.setText("");
+                    conChPassword.setText("");
+                    Toast.makeText(this, "Password Mismatch", Toast.LENGTH_SHORT).show();
+                }
             }else{
-                newChPassword.setText("");
-                conChPassword.setText("");
-                Toast.makeText(this, "Password Mismatch", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Password must be min 8 characters", Toast.LENGTH_SHORT).show();
             }
+
+
         }else{
             Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
         }
@@ -128,35 +137,42 @@ public class EditAccount extends AppCompatActivity {
         final String logged =  getIntent().getStringExtra("Mail");
         final String userName = changedName.getText().toString();
 
-        StringRequest request = new StringRequest(Request.Method.POST, update_username_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.equals("Name changed Successfully")){
-                            changedName.setText("");
-                            Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
+        String namePattern = "(?=^.{0,50}$)^[a-zA-Z-]+\\s[a-zA-Z-]+$";
+        if(userName.matches(namePattern)){
+            StringRequest request = new StringRequest(Request.Method.POST, update_username_url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.equals("Name changed Successfully")){
+                                changedName.setText("");
+                                Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
 
-                        }else if(response.equals("Can't change Try again Later ...")){
-                            Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
+                            }else if(response.equals("Can't change Try again Later ...")){
+                                Toast.makeText(EditAccount.this, response, Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(EditAccount.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email", logged);
-                params.put("fullname",userName);
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(EditAccount.this);
-        requestQueue.add(request);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(EditAccount.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    error.printStackTrace();
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("email", logged);
+                    params.put("fullname",userName);
+                    return params;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(EditAccount.this);
+            requestQueue.add(request);
+        }else{
+            Toast.makeText(this, "Enter a valid Name", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
 

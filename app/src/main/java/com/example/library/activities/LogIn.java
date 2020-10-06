@@ -1,7 +1,9 @@
 package com.example.library.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +32,7 @@ import java.util.Map;
 public class LogIn extends AppCompatActivity {
     TextView lemail;
     Button logInBtn;
+    TextView signUp;
     TextView lpass;
     ProgressBar progressBar;
     String logIn_url = "http://192.168.43.225/library/login.php";
@@ -43,6 +46,7 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
         lemail =  findViewById(R.id.luserMail);
         lpass = findViewById(R.id.luserPassword);
         progressBar = findViewById(R.id.lprogressBar);
+        signUp = findViewById(R.id.lsignUpBtn);
 
         logInBtn = findViewById(R.id.mainlogInBtn);
 
@@ -53,6 +57,15 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
                 logInBtn.setEnabled(false);
             }
         });
+
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LogIn.this, signUp.class));
+                finish();
+            }
+        });
+
 
 
     }
@@ -151,9 +164,53 @@ String getUserInfo_url = "http://192.168.43.225/library/retrieve_user_info.php";
         requestQueue.add(jsonArrayRequest);
     }
 
-    public void onBackPressed(){
-        startActivity(new Intent(LogIn.this, signUp.class));
-        finish();
+    public void onBackPressed() {
+        // Create the object of
+        // AlertDialog Builder class
+        AlertDialog.Builder builder = new AlertDialog.Builder(LogIn.this);
+
+        // Set the message show for the Alert time
+        builder.setMessage("Do you want to exit ? 😢");
+
+        // Set Alert Title
+        builder.setTitle("📙 Library");
+
+        // Set Cancelable false
+        // for when the user clicks on the outside
+        // the Dialog Box then it will remain show
+        builder.setCancelable(true);
+
+        // Set the positive button with yes name
+        // OnClickListener method is use of
+        // DialogInterface interface.
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // When the user click yes button
+                // then app will close
+                finish();
+            }
+        });
+
+        // Set the Negative button with No name
+        // OnClickListener method is use
+        // of DialogInterface interface.
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // If user click no
+                // then dialog box is canceled.
+                dialog.cancel();
+            }
+        });
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // Show the Alert Dialog box
+        alertDialog.show();
     }
 
 

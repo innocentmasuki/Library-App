@@ -6,32 +6,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.library.R;
 
 public class Welcome extends AppCompatActivity {
-            public Button signUp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-            signUp = findViewById(R.id.signUpBtn);
-            signUp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openSignUpActivity();
-                }
-            });
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(getApplicationContext(), LogIn.class));
+                finish();
+            }
+        }, 3000);
     }
 
-    public void openSignUpActivity() {
-        Intent intent = new Intent(Welcome.this, com.example.library.activities.signUp.class);
-        startActivity(intent);
-        finish();
-    }
+
 
     public void onBackPressed() {
         // Create the object of
